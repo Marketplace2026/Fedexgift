@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #080b12 100%);
+  color: #f3f4f6;
+  font-family: var(--font-inter);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Gold Text and Glow Utilities */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFF5C0 0%, #FFD700 35%, #FFA500 70%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-glow {
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.15);
+  border: 1.5px solid rgba(255, 215, 0, 0.5);
+}
+
+.gold-box-shadow {
+  box-shadow: 0 10px 30px -5px rgba(255, 215, 0, 0.25), 0 0 15px rgba(220, 38, 38, 0.3);
+}
+
+.red-gradient-btn {
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.5);
+}
+
+.green-pulse-btn {
+  background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+  animation: pulseGlow 2s infinite;
+}
+
+/* Gift Ribbon Styling */
+.gift-ribbon-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  background: linear-gradient(90deg, #d97706 0%, #FFD700 50%, #d97706 100%);
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+
+.gift-ribbon-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
+  background: linear-gradient(180deg, #d97706 0%, #FFD700 50%, #d97706 100%);
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+
+.gift-bow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle, #FFE033 0%, #FFD700 60%, #B8860B 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+  z-index: 10;
+}
+
+.gift-bow::before, .gift-bow::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50% 50% 0 50%;
+  background: #FFD700;
+  border: 2px solid #B8860B;
+}
+
+.gift-bow::before {
+  top: -8px;
+  left: -8px;
+  transform: rotate(-35deg);
+}
+
+.gift-bow::after {
+  top: -8px;
+  right: -8px;
+  transform: rotate(125deg);
+}
+
+/* Glassmorphic card styling */
+.glass-card {
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+/* Hide scrollbar for clean carousel */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
