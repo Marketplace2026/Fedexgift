@@ -81,7 +81,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     doc.setTextColor(255, 215, 0); // Gold
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
-    doc.text("FEDEZ SHIFT", 105, 20, { align: "center" });
+    doc.text("FedexShift", 105, 20, { align: "center" });
 
     doc.setFontSize(11);
     doc.setTextColor(255, 255, 255);
@@ -171,7 +171,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     doc.setFontSize(9);
     doc.setTextColor(22, 163, 74);
     doc.setFont("helvetica", "bold");
-    doc.text("FEDEZ SHIFT", 157.5, startY + 52, { align: "center" });
+    doc.text("FedexShift", 157.5, startY + 52, { align: "center" });
     doc.text("APPROUVÉ & CERTIFIÉ", 157.5, startY + 58, { align: "center" });
     doc.text("100% GARANTI", 157.5, startY + 63, { align: "center" });
 
@@ -183,13 +183,13 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     doc.text("votre virement sur votre compte Mobile Money dans les plus brefs délais.", 25, startY + 80);
 
     // Save File
-    doc.save(`recu_gain_fedez_shift_${refId}.pdf`);
+    doc.save(`recu_gain_fedex_shift_${refId}.pdf`);
   };
 
   const getWhatsAppLink = () => {
     const fullPhone = `${countryCode}${phone}`;
     const selectedPayName = PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Mobile Money";
-    const message = `Bonjour FEDEZ SHIFT, je viens de gagner ${winningPrize.toLocaleString("fr-FR")} FCFA sur le site !
+    const message = `Bonjour FedexShift, je viens de gagner ${winningPrize.toLocaleString("fr-FR")} FCFA sur le site !
 
 Nom: ${nom}
 Email: ${email}
@@ -344,7 +344,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 text-left space-y-2">
               <div className="flex items-center gap-2 text-yellow-300 font-bold text-xs">
                 <Download className="w-4 h-4 text-yellow-400 animate-bounce" />
-                1. Reçu téléchargé dans votre téléphone : <span className="underline">recu_gain_fedez_shift.pdf</span>
+                1. Reçu téléchargé dans votre téléphone : <span className="underline">recu_gain_fedex_shift.pdf</span>
               </div>
               <div className="flex items-center gap-2 text-green-400 font-bold text-xs">
                 <MessageSquare className="w-4 h-4 text-green-400" />
@@ -373,7 +373,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
 
             <p className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-yellow-400" />
-              Service Client WhatsApp Officiel FEDEZ SHIFT - Réponse en 2h max
+              Service Client WhatsApp Officiel FedexShift - Réponse en 2h max
             </p>
           </motion.div>
         )}

@@ -69,7 +69,7 @@ export default function WinningModal({ isOpen, winningPrize, onClaim }: WinningM
               </p>
             </div>
             <div className="w-full flex justify-between items-center text-[10px] text-gray-400">
-              <span>FEDEZ-SHIFT-2026</span>
+              <span>FEDEX-SHIFT-2026</span>
               <span>VALIDÉ</span>
             </div>
           </div>

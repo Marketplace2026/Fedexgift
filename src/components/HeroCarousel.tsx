@@ -38,7 +38,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Samuel Mbarga",
     ville: "Douala, Cameroun",
     montant: "1.500.000 FCFA",
-    texte: "1.500.000 FCFA !!! C'est la première fois que je gagne une somme aussi énorme sur internet. MERCI FEDEZ SHIFT !",
+    texte: "1.500.000 FCFA !!! C'est la première fois que je gagne une somme aussi énorme sur internet. MERCI FedexShift !",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 45 min"
   },
@@ -101,7 +101,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Brice Ndong",
     ville: "Douala, Cameroun",
     montant: "1.000.000 FCFA",
-    texte: "1.000.000 FCFA tombé du ciel. FEDEZ SHIFT est 100% réel. Je viens de valider mon reçu PDF.",
+    texte: "1.000.000 FCFA tombé du ciel. FedexShift est 100% réel. Je viens de valider mon reçu PDF.",
     avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 4h"
   }
@@ -151,7 +151,7 @@ export default function HeroCarousel() {
         </div>
 
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-black text-white leading-tight tracking-wide max-w-4xl mx-auto">
-          GRAND JEU CONCOURS <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FEDEZ SHIFT</span>
+          GRAND JEU CONCOURS <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexShift</span>
         </h1>
         <p className="text-base sm:text-xl font-bold text-red-400 max-w-2xl mx-auto">
           GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">1.500.000 FCFA</span> EN DÉBALLANT VOTRE BOÎTE !

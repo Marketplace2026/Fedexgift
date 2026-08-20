@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FEDEZ SHIFT - Grand Jeu Concours Cadeaux",
-  description: "Tentez votre chance et gagnez jusqu'à 1.500.000 FCFA instantanément avec FEDEZ SHIFT ! 15 boîtes cadeaux disponibles.",
+  title: "FedexShift - Grand Jeu Concours Cadeaux",
+  description: "Tentez votre chance et gagnez jusqu'à 1.500.000 FCFA instantanément avec FedexShift ! 15 boîtes cadeaux disponibles.",
 };
 
 export const viewport: Viewport = {
