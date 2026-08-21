@@ -58,24 +58,31 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
             </p>
           </div>
 
-          {/* 2. Luxury Physical Gift Card */}
+          {/* 2. Luxury Physical Gift Card with Real Photo */}
           {winningItem && (
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="my-4 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-red-600/30 via-yellow-500/20 to-red-600/30 border-2 border-yellow-400/80 shadow-lg flex items-center justify-center gap-4 text-left"
+              className="my-4 p-4 rounded-2xl bg-gradient-to-r from-red-950/80 via-brandDark-800 to-yellow-950/80 border-2 border-yellow-400/90 shadow-2xl flex flex-col sm:flex-row items-center gap-4 text-left overflow-hidden relative"
             >
-              <div className="text-4xl sm:text-5xl shrink-0 animate-pulse">{winningItem.icon}</div>
-              <div>
-                <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1">
-                  <Gift className="w-3.5 h-3.5 text-yellow-400" /> CADEAU DE LUXE GAGNÉ
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-xl overflow-hidden border-2 border-yellow-400 shadow-xl gold-border-glow">
+                <img
+                  src={winningItem.image}
+                  alt={winningItem.name}
+                  className="w-full h-full object-cover transform hover:scale-110 transition duration-500"
+                />
+                <span className="absolute bottom-1 right-1 text-lg bg-black/60 px-1 rounded">{winningItem.icon}</span>
+              </div>
+              <div className="flex-1">
+                <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1 mb-1">
+                  <Gift className="w-3.5 h-3.5 text-yellow-400 animate-bounce" /> LOT PHYSIQUE DE LUXE RÉSERVÉ
                 </span>
-                <p className="text-base sm:text-lg font-black text-white leading-tight">
+                <p className="text-base sm:text-xl font-black text-white leading-tight mb-1">
                   {winningItem.name}
                 </p>
-                <span className="text-xs text-green-400 font-bold">
-                  Valeur estimée : {winningItem.valueEst} (Édition Officielle)
+                <span className="inline-block bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-2.5 py-0.5 rounded-full font-bold">
+                  Valeur officielle : {winningItem.valueEst}
                 </span>
               </div>
             </motion.div>

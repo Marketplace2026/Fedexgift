@@ -14,17 +14,18 @@ export interface LuxuryItem {
   category: string;
   icon: string;
   valueEst: string;
+  image: string;
 }
 
 export const LUXURY_ITEMS: LuxuryItem[] = [
-  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000" },
-  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599" },
-  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500" },
-  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000" },
-  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999" },
-  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500" },
-  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200" },
-  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000" }
+  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000", image: "/images/items/tesla.jpg" },
+  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599", image: "/images/items/iphone.jpg" },
+  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500", image: "/images/items/rolex.jpg" },
+  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000", image: "/images/items/mercedes.jpg" },
+  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999", image: "/images/items/macbook.jpg" },
+  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500", image: "/images/items/harley.jpg" },
+  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200", image: "/images/items/ps5.jpg" },
+  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000", image: "/images/items/porsche.jpg" }
 ];
 
 interface BoxGridGameProps {
@@ -257,10 +258,14 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className="z-10 space-y-0.5 p-1"
+                  className="z-10 flex flex-col items-center justify-center space-y-0.5 p-0.5"
                 >
-                  <span className="text-xl sm:text-2xl block">{winningItem.icon}</span>
-                  <span className="text-[11px] sm:text-xs font-black text-red-950 block tracking-tight leading-tight">
+                  <img
+                    src={winningItem.image}
+                    alt={winningItem.name}
+                    className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border border-yellow-400 shadow-md"
+                  />
+                  <span className="text-[10px] sm:text-xs font-black text-red-950 block tracking-tight leading-tight">
                     {winningPrize.toLocaleString("en-US")} $
                   </span>
                   <span className="text-[8px] font-extrabold text-red-900 uppercase block truncate max-w-[75px]">
