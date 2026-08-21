@@ -298,7 +298,7 @@ export default function HeroCarousel() {
           GRAND JEU CONCOURS <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexGift</span>
         </h1>
         <p className="text-base sm:text-xl font-bold text-red-400 max-w-2xl mx-auto">
-          GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">500.000 $</span> EN DÉBALLANT VOTRE BOÎTE !
+          GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">500.000 $ + VÉHICULES & IPHONE</span> EN DÉBALLANT VOTRE BOÎTE !
         </p>
       </motion.div>
 

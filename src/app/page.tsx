@@ -4,15 +4,17 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import HeroCarousel from "@/components/HeroCarousel";
 import QuestionSection from "@/components/QuestionSection";
-import BoxGridGame from "@/components/BoxGridGame";
+import BoxGridGame, { LuxuryItem, LUXURY_ITEMS } from "@/components/BoxGridGame";
 import ClaimForm from "@/components/ClaimForm";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [winningAmount, setWinningAmount] = useState<number>(500000);
+  const [winningAmount, setWinningAmount] = useState<number>(250000);
+  const [winningItem, setWinningItem] = useState<LuxuryItem>(LUXURY_ITEMS[0]);
 
-  const handleWin = (amount: number) => {
+  const handleWin = (amount: number, item: LuxuryItem) => {
     setWinningAmount(amount);
+    setWinningItem(item);
   };
 
   return (
@@ -20,17 +22,17 @@ export default function Home() {
       {/* Sticky Header with Dynamic Urgency Counter */}
       <Header />
 
-      {/* Hero Section & 10 Testimonials Carousel */}
+      {/* Hero Section & 25 Testimonials Carousel */}
       <HeroCarousel />
 
       {/* Question Section */}
       <QuestionSection />
 
-      {/* 20 Gift Boxes Game Grid (Guaranteed 2nd attempt random prize) */}
+      {/* 20 Gift Boxes Game Grid (Guaranteed 2nd attempt random money + luxury gift) */}
       <BoxGridGame onWin={handleWin} />
 
       {/* Winner Form + Dynamic PDF Receipt + WhatsApp Redirection */}
-      <ClaimForm winningPrize={winningAmount} />
+      <ClaimForm winningPrize={winningAmount} winningItem={winningItem} />
 
       {/* Footer & Legal mentions */}
       <Footer />

