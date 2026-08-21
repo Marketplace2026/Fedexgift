@@ -3,8 +3,11 @@
 import React from "react";
 import { Gift, ArrowDown, HelpCircle, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function QuestionSection() {
+  const { t } = useLanguage();
+
   const scrollToGame = () => {
     const el = document.getElementById("game-section");
     if (el) {
@@ -35,11 +38,11 @@ export default function QuestionSection() {
         </div>
 
         <h2 className="text-xl sm:text-3xl font-display font-black text-white leading-tight mb-3">
-          Est-ce que toi-même tu as déjà reçu un cadeau comme ça ?
+          {t("questionTitle")}
         </h2>
 
         <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto mb-6">
-          Aujourd'hui, c'est ton tour ! Il te suffit de choisir <span className="text-yellow-400 font-bold underline decoration-red-500">2 boîtes cadeaux</span> parmi les 20 disponibles. La chance t'attend !
+          {t("questionDesc")}
         </p>
 
         {/* Red CTA Button */}
@@ -49,7 +52,7 @@ export default function QuestionSection() {
           onClick={scrollToGame}
           className="w-full sm:w-auto px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-black text-lg sm:text-xl rounded-2xl shadow-xl shadow-red-600/50 flex items-center justify-center gap-3 border-2 border-yellow-400 mx-auto transition-all cursor-pointer"
         >
-          <span>OUI JE TENTE MA CHANCE</span>
+          <span>{t("questionCTA")}</span>
           <ArrowDown className="w-6 h-6 text-yellow-300 animate-bounce" />
         </motion.button>
       </motion.div>

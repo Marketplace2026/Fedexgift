@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { LuxuryItem } from "./BoxGridGame";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ClaimFormProps {
   winningPrize: number;
@@ -22,6 +23,8 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [transactionId, setTransactionId] = useState("");
 
+  const { t } = useLanguage();
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -34,7 +37,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     const refId = "FDX-" + Math.random().toString(36).substring(2, 9).toUpperCase() + "-" + Date.now().toString().slice(-4);
     setTransactionId(refId);
 
-    // Generate PDF receipt with jsPDF
+    // Generate PDF receipt in selected language with jsPDF
     generatePDFReceipt(refId);
 
     setIsSubmitted(true);
@@ -66,15 +69,15 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setTextColor(255, 215, 0); // Gold
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
-    doc.text("FedexGift", 105, 20, { align: "center" });
+    doc.text(t("pdfHeaderTitle"), 105, 20, { align: "center" });
 
     doc.setFontSize(11);
     doc.setTextColor(255, 255, 255);
-    doc.text("REÇU OFFICIEL DE GAIN : ARGENT + CADEAU DE LUXE", 105, 28, { align: "center" });
+    doc.text(t("pdfHeaderSub"), 105, 28, { align: "center" });
 
     doc.setFontSize(9);
     doc.setTextColor(200, 200, 200);
-    doc.text("Licence Internationale N° FG-99382026-GLOBAL", 105, 35, { align: "center" });
+    doc.text(t("pdfLicence"), 105, 35, { align: "center" });
 
     // Gold decorative bar
     doc.setFillColor(255, 215, 0);
@@ -91,23 +94,23 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
 
     doc.setFontSize(10);
     doc.setTextColor(51, 65, 85);
-    doc.text(`RÉFÉRENCE TRANSACTION :`, 25, 71);
+    doc.text(t("pdfRefLabel"), 25, 71);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(185, 28, 28);
     doc.text(refId, 85, 71);
 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(51, 65, 85);
-    doc.text(`DATE ET HEURE DE EMISSION :`, 25, 80);
+    doc.text(t("pdfDateLabel"), 25, 80);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
     doc.text(currentDate, 85, 80);
 
     // Winner Info Table
-    doc.setFontSize(13);
+    doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text("INFORMATIONS DU GAGNANT & ADRESSE DE RÉSIDENCE", 25, 98);
+    doc.text(t("pdfSectionTitle"), 25, 98);
 
     doc.setDrawColor(226, 232, 240);
     doc.line(25, 101, 185, 101);
@@ -115,13 +118,13 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     
-    // Rows
+    // Rows translated according to selected language
     const rows = [
-      ["Nom & Prénom :", nom],
-      ["Adresse Email :", email],
-      ["Adresse de Résidence (Livraison) :", adresse],
-      ["Cadeau de Luxe Gagné :", itemName],
-      ["Statut Expédition & Virement :", "EN ATTENTE DE CONFIRMATION WHATSAPP"],
+      [t("pdfRowNom"), nom],
+      [t("pdfRowEmail"), email],
+      [t("pdfRowAdresse"), adresse],
+      [t("pdfRowItem"), itemName],
+      [t("pdfRowStatus"), t("pdfStatusValue")],
     ];
 
     let startY = 108;
@@ -131,9 +134,9 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       doc.setFont("helvetica", "bold");
       doc.setTextColor(15, 23, 42);
       
-      // Wrap text if address is long
-      const splitVal = doc.splitTextToSize(value, 100);
-      doc.text(splitVal, 85, startY);
+      // Wrap text if address or value is long
+      const splitVal = doc.splitTextToSize(value, 95);
+      doc.text(splitVal, 88, startY);
 
       doc.setFont("helvetica", "normal");
       startY += (splitVal.length * 6) + 3;
@@ -147,9 +150,9 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setFontSize(11);
     doc.setTextColor(185, 28, 28);
     doc.setFont("helvetica", "bold");
-    doc.text("TOTAL NET DES GAINS RÉSERVÉS :", 105, startY + 14, { align: "center" });
+    doc.text(t("pdfNetTotalLabel"), 105, startY + 14, { align: "center" });
 
-    doc.setFontSize(18);
+    doc.setFontSize(17);
     doc.setTextColor(22, 163, 74);
     doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  ${winningItem?.name || "iPhone 16 Pro Max"}`, 105, startY + 26, { align: "center" });
 
@@ -161,15 +164,15 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setTextColor(22, 163, 74);
     doc.setFont("helvetica", "bold");
     doc.text("FedexGift", 157.5, startY + 50, { align: "center" });
-    doc.text("APPROUVÉ & CERTIFIÉ", 157.5, startY + 56, { align: "center" });
-    doc.text("100% GARANTI", 157.5, startY + 61, { align: "center" });
+    doc.text(t("pdfStampApproved"), 157.5, startY + 56, { align: "center" });
+    doc.text(t("pdfStampGuaranteed"), 157.5, startY + 61, { align: "center" });
 
     // Security & Instructions Footer
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(100, 116, 139);
-    doc.text("Instructions importantes : Veuillez présenter ce reçu à notre agent WhatsApp pour débloquer", 25, startY + 73);
-    doc.text("votre virement et planifier la livraison directe à votre résidence.", 25, startY + 78);
+    const footerLines = doc.splitTextToSize(t("pdfFooterInstruction"), 165);
+    doc.text(footerLines, 25, startY + 73);
 
     // Save File
     doc.save(`recu_gain_fedex_gift_${refId}.pdf`);
@@ -177,15 +180,15 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
 
   const getWhatsAppLink = () => {
     const itemStr = winningItem ? winningItem.name : "Cadeau de Luxe";
-    const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("en-US")} $ + ${itemStr} sur le site !
+    const message = `${t("waMessageHello")} ${winningPrize.toLocaleString("en-US")} $ + ${itemStr} ${t("waMessageOnSite")}
 
-Nom: ${nom}
-Email: ${email}
-Adresse Complète de Résidence: ${adresse}
-Cadeau de Luxe: ${itemStr}
-Réf Reçu: ${transactionId}
+${t("waName")} ${nom}
+${t("waEmail")} ${email}
+${t("waAddress")} ${adresse}
+${t("waItem")} ${itemStr}
+${t("waRef")} ${transactionId}
 
-Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma résidence !`;
+${t("waClosing")}`;
 
     return `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
@@ -198,7 +201,7 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
         <div className="text-center mb-8 space-y-2">
           <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 px-3 py-1 rounded-full text-xs font-bold uppercase">
             <Lock className="w-3.5 h-3.5 text-green-400" />
-            Formulaire Officiel de Réclamation & Livraison
+            {t("claimBadge")}
           </div>
 
           {winningItem && (
@@ -210,7 +213,7 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
               />
               <div>
                 <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
-                  🎁 Lot de luxe réservé pour livraison à domicile
+                  🎁 {t("winningModalItemLabel")}
                 </span>
                 <span className="text-sm font-black text-white block">
                   {winningItem.name} ({winningItem.valueEst})
@@ -220,10 +223,10 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
           )}
 
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white">
-            RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
+            {t("claimTitle")} <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
           </h2>
           <p className="text-xs sm:text-sm text-gray-300">
-            Remplissez l'adresse exacte de votre résidence pour l'expédition directe de votre lot.
+            {t("claimSub")}
           </p>
         </div>
 
@@ -234,14 +237,14 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <User className="w-4 h-4 text-yellow-400" />
-                Nom et Prénom *
+                {t("labelNom")}
               </label>
               <input
                 type="text"
                 required
                 value={nom}
                 onChange={(e) => setNom(e.target.value)}
-                placeholder="Ex: Marco Rossi / John Smith"
+                placeholder={t("placeholderNom")}
                 className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
               />
             </div>
@@ -250,14 +253,14 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Mail className="w-4 h-4 text-yellow-400" />
-                Adresse Email *
+                {t("labelEmail")}
               </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Ex: winner@example.com"
+                placeholder={t("placeholderEmail")}
                 className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
               />
             </div>
@@ -266,18 +269,18 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-green-400" />
-                Adresse Complète de Résidence (Livraison Directe) *
+                {t("labelAdresse")}
               </label>
               <textarea
                 required
                 rows={3}
                 value={adresse}
                 onChange={(e) => setAdresse(e.target.value)}
-                placeholder="Ex: 123 Rue de la Paix, Appt 4B, 75002 Paris, France OR 456 Main Street, Apt 12, New York, NY 10001, USA"
+                placeholder={t("placeholderAdresse")}
                 className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner resize-none"
               />
               <span className="text-[10px] text-gray-400 mt-1 block">
-                Précisez le numéro de rue, bâtiment, code postal, ville et pays pour le transporteur.
+                {t("addressHelper")}
               </span>
             </div>
 
@@ -289,7 +292,7 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
               className="w-full py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-600 hover:from-red-500 hover:to-red-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-red-600/50 border border-yellow-400 flex items-center justify-center gap-2 cursor-pointer mt-4"
             >
               <Sparkles className="w-5 h-5 text-yellow-300 animate-spin" />
-              <span>GÉNÉRER MON REÇU PDF & VALIDER L'EXPÉDITION</span>
+              <span>{t("submitCTA")}</span>
             </motion.button>
           </form>
         ) : (
@@ -305,7 +308,7 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
 
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-white mb-1">
-                REÇU ET BON DE LIVRAISON GÉNÉRÉS !
+                {t("successTitle")}
               </h3>
               <p className="text-xs text-gray-300">
                 Réf: <span className="text-yellow-400 font-mono font-bold">{transactionId}</span>
@@ -315,20 +318,20 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 text-left space-y-2">
               <div className="flex items-center gap-2 text-yellow-300 font-bold text-xs">
                 <Download className="w-4 h-4 text-yellow-400 animate-bounce" />
-                1. Reçu téléchargé dans votre téléphone : <span className="underline">recu_gain_fedex_gift.pdf</span>
+                {t("successStep1")}
               </div>
               <div className="flex items-center gap-2 text-green-400 font-bold text-xs">
                 <MessageSquare className="w-4 h-4 text-green-400" />
-                2. Cliquez ci-dessous pour transmettre l'adresse et valider le virement.
+                {t("successStep2")}
               </div>
             </div>
 
-            {/* Re-Download PDF Button if needed */}
+            {/* Re-Download PDF Button */}
             <button
               onClick={() => generatePDFReceipt(transactionId)}
               className="text-xs text-yellow-300/80 hover:text-yellow-300 underline flex items-center justify-center gap-1 mx-auto"
             >
-              <Download className="w-3.5 h-3.5" /> Re-télécharger mon reçu PDF
+              <Download className="w-3.5 h-3.5" /> {t("reDownload")}
             </button>
 
             {/* Green WhatsApp Action Button */}
@@ -339,12 +342,12 @@ Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma r
               className="w-full py-4 bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-lg sm:text-xl rounded-2xl shadow-xl shadow-[#25D366]/40 flex items-center justify-center gap-3 border-2 border-white cursor-pointer transition-all block text-center"
             >
               <MessageSquare className="w-6 h-6 fill-white" />
-              <span>FINALISER SUR WHATSAPP</span>
+              <span>{t("whatsappCTA")}</span>
             </a>
 
             <p className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-yellow-400" />
-              Service Client WhatsApp Officiel FedexGift - Confirmation d'adresse en 2h max
+              {t("supportNote")}
             </p>
           </motion.div>
         )}

@@ -4,6 +4,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Trophy, CheckCircle2, ArrowRight, Gift } from "lucide-react";
 import { LuxuryItem } from "./BoxGridGame";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface WinningModalProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ interface WinningModalProps {
 }
 
 export default function WinningModal({ isOpen, winningPrize, winningItem, onClaim }: WinningModalProps) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -38,20 +41,20 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
 
           <h3 className="text-sm uppercase tracking-widest text-yellow-400 font-extrabold mb-1 flex items-center justify-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-green-400" />
-            DOUBLE GAIN GAGNANT VALIDÉ
+            {t("winningModalHeader")}
           </h3>
 
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white leading-tight mb-4">
-            FÉLICITATIONS ! <br />
+            {t("winningModalTitle")} <br />
             <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.6)]">
-              VOUS AVEZ GAGNÉ LE JACKPOT :
+              {t("winningModalSub")}
             </span>
           </h2>
 
           {/* 1. Cash Prize Card */}
           <div className="my-4 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-yellow-400/30 to-yellow-500/20 border-2 border-yellow-400/70 shadow-inner">
             <span className="text-[10px] uppercase font-bold text-yellow-300/80 tracking-widest block mb-0.5">
-              💵 MONTANT EN CASH GAGNÉ
+              {t("winningModalCashLabel")}
             </span>
             <p className="text-3xl sm:text-4xl font-black text-yellow-300 tracking-tight">
               {winningPrize.toLocaleString("en-US")} <span className="text-xl sm:text-2xl">$ USD</span>
@@ -76,13 +79,13 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
               </div>
               <div className="flex-1">
                 <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1 mb-1">
-                  <Gift className="w-3.5 h-3.5 text-yellow-400 animate-bounce" /> LOT PHYSIQUE DE LUXE RÉSERVÉ
+                  <Gift className="w-3.5 h-3.5 text-yellow-400 animate-bounce" /> {t("winningModalItemLabel")}
                 </span>
                 <p className="text-base sm:text-xl font-black text-white leading-tight mb-1">
                   {winningItem.name}
                 </p>
                 <span className="inline-block bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-2.5 py-0.5 rounded-full font-bold">
-                  Valeur officielle : {winningItem.valueEst}
+                  {t("winningModalValueEst")} {winningItem.valueEst}
                 </span>
               </div>
             </motion.div>
@@ -100,7 +103,7 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
                 💵 $ {winningPrize.toLocaleString("en-US")} + {winningItem?.icon || "🎁"}
               </span>
               <p className="text-[9px] text-green-400/80 uppercase font-semibold mt-1">
-                Colis & Virement réservés à votre nom
+                {t("winningModalCashBill")}
               </p>
             </div>
             <div className="w-full flex justify-between items-center text-[10px] text-gray-400">
@@ -110,7 +113,7 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
           </div>
 
           <p className="text-xs sm:text-sm text-gray-300 mb-6">
-            Votre argent et votre cadeau de luxe ont été réservés avec succès. Remplissez le formulaire pour recevoir votre virement et l'expédition de votre lot.
+            {t("winningModalText")}
           </p>
 
           {/* Claim Button */}
@@ -120,7 +123,7 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
             onClick={onClaim}
             className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg sm:text-xl rounded-2xl shadow-xl shadow-green-600/50 flex items-center justify-center gap-3 border-2 border-yellow-300 cursor-pointer transition-all"
           >
-            <span>RÉCLAMER MES GAINS</span>
+            <span>{t("winningModalCTA")}</span>
             <ArrowRight className="w-6 h-6 text-yellow-300" />
           </motion.button>
         </motion.div>

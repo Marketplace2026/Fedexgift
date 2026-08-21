@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Zap, Star, ChevronLeft, ChevronRight, CheckCircle2, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Testimonial {
   id: number;
@@ -253,6 +254,7 @@ const TESTIMONIALS: Testimonial[] = [
 
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -291,14 +293,14 @@ export default function HeroCarousel() {
       >
         <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
           <Trophy className="w-4 h-4 text-yellow-400" />
-          Tirage Au Sort 100% Gagnant à la 2ème Boîte
+          {t("heroBadge")}
         </div>
 
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-black text-white leading-tight tracking-wide max-w-4xl mx-auto">
-          GRAND JEU CONCOURS <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexGift</span>
+          {t("heroTitle")} <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexGift</span>
         </h1>
         <p className="text-base sm:text-xl font-bold text-red-400 max-w-2xl mx-auto">
-          GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">500.000 $ + VÉHICULES & IPHONE</span> EN DÉBALLANT VOTRE BOÎTE !
+          {t("heroSubtitle")}
         </p>
       </motion.div>
 
@@ -306,7 +308,7 @@ export default function HeroCarousel() {
       <div className="mt-8 mb-10 max-w-xl mx-auto relative">
         <div className="text-xs font-semibold text-yellow-200/80 uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
           <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-          Derniers gagnants vérifiés ({currentIndex + 1}/25)
+          {t("verifiedWinners")} ({currentIndex + 1}/25)
           <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
         </div>
 
@@ -351,7 +353,7 @@ export default function HeroCarousel() {
                 ))}
               </div>
 
-              <p className="text-sm md:text-base text-gray-200 italic text-left">
+              <p className="text-xs sm:text-sm text-gray-200 italic text-left leading-relaxed">
                 "{TESTIMONIALS[currentIndex].texte}"
               </p>
             </motion.div>
@@ -397,7 +399,7 @@ export default function HeroCarousel() {
         className="w-full sm:w-auto px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg md:text-xl rounded-2xl shadow-2xl shadow-green-600/50 green-pulse-btn flex items-center justify-center gap-3 border-2 border-yellow-300 mx-auto transition-all cursor-pointer"
       >
         <Zap className="w-6 h-6 text-yellow-300 fill-yellow-300 animate-bounce" />
-        <span>TENTER MA CHANCE MAINTENANT</span>
+        <span>{t("heroCTA")}</span>
       </motion.button>
     </section>
   );

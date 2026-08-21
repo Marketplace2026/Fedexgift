@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ShieldCheck, Gift, Award, Sparkles } from "lucide-react";
+import { ShieldCheck, Gift, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSelector from "./LanguageSelector";
 
 export default function Header() {
   const [boxesLeft, setBoxesLeft] = useState(19);
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Random initial decrement between 0 and 3
@@ -26,13 +29,13 @@ export default function Header() {
       <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-700 text-white text-xs md:text-sm py-1.5 px-3 text-center font-bold tracking-wide flex items-center justify-center gap-2 shadow-inner">
         <Sparkles className="w-4 h-4 text-yellow-300 animate-spin" style={{ animationDuration: '3s' }} />
         <span>
-          EN DIRECT : Plus que <span className="bg-yellow-400 text-red-900 px-2 py-0.5 rounded-full font-black animate-pulse">{boxesLeft}</span> boîtes gagnantes disponibles aujourd'hui !
+          {t("headerBanner", { count: boxesLeft })}
         </span>
         <Sparkles className="w-4 h-4 text-yellow-300 animate-spin" style={{ animationDuration: '3s' }} />
       </div>
 
       {/* Main navigation header */}
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
         {/* Logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
@@ -54,15 +57,19 @@ export default function Header() {
           </div>
         </motion.div>
 
-        {/* Security Badge */}
+        {/* Right side: Security Badge & Language Selector */}
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 text-xs px-2.5 py-1.5 rounded-full shadow-sm"
+          className="flex items-center gap-2"
         >
-          <ShieldCheck className="w-4 h-4 text-green-400 shrink-0" />
-          <span className="hidden sm:inline font-semibold">Licence Certifiée & Sécurisée</span>
-          <span className="sm:hidden font-semibold">Certifié 100%</span>
+          <div className="hidden md:flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 text-xs px-2.5 py-1.5 rounded-full shadow-sm">
+            <ShieldCheck className="w-4 h-4 text-green-400 shrink-0" />
+            <span className="font-semibold">Licence Certifiée & Sécurisée</span>
+          </div>
+
+          {/* Interactive Language Selector Dropdown */}
+          <LanguageSelector />
         </motion.div>
       </div>
     </header>

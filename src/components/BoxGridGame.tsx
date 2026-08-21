@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Sparkles, AlertCircle, CheckCircle, Lock } from "lucide-react";
 import confetti from "canvas-confetti";
 import WinningModal from "./WinningModal";
+import { useLanguage } from "@/context/LanguageContext";
 
 const PRIZES = [50000, 100000, 150000, 250000, 350000, 500000];
 
@@ -41,6 +42,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   const [secondWinningBoxId, setSecondWinningBoxId] = useState<number | null>(null);
   const [showLossMessage, setShowLossMessage] = useState<boolean>(false);
   const [showWinningModal, setShowWinningModal] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   // Initialize random prize and luxury item on mount
   useEffect(() => {
@@ -133,11 +135,11 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <div className="text-center mb-8 space-y-3">
         <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/50 px-4 py-1.5 rounded-full text-xs font-bold text-red-300 uppercase tracking-wider">
           <Sparkles className="w-4 h-4 text-yellow-400" />
-          20 BOÎTES CADEAUX MYSTÈRES (ARGENT + CADEX DE LUXE)
+          {t("gameBadge")}
         </div>
 
         <h2 className="text-2xl sm:text-4xl font-display font-black text-white">
-          CHOISISSEZ VOTRE <span className="text-gold-gradient">BOÎTE GAGNANTE</span>
+          {t("gameTitle")}
         </h2>
 
         {/* Dynamic Instruction Banner based on attempt */}
@@ -145,7 +147,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
           {attempt === 0 && (
             <div className="bg-yellow-500/10 border border-yellow-500/40 rounded-xl p-3 text-yellow-300 text-sm font-semibold flex items-center justify-center gap-2">
               <Gift className="w-5 h-5 text-yellow-400 animate-bounce" />
-              <span>Étape 1/2 : Touchez une 1ère boîte pour tenter le tirage</span>
+              <span>{t("step1")}</span>
             </div>
           )}
 
@@ -156,14 +158,14 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
               className="bg-green-600/20 border border-green-500/60 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2 shadow-lg"
             >
               <Sparkles className="w-5 h-5 text-yellow-400 animate-spin" />
-              <span>Dernière étape : Touchez une 2ème boîte pour DÉBALLER VOTRE GAIN + CADEAU !</span>
+              <span>{t("step2")}</span>
             </motion.div>
           )}
 
           {attempt >= 2 && (
             <div className="bg-green-600/30 border border-green-500/80 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>BOÎTE GAGNANTE DÉBALLÉE ! ARGENT + CADEAU RÉSERVÉS.</span>
+              <span>{t("boxOpened")}</span>
             </div>
           )}
         </div>
@@ -181,10 +183,10 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
             <AlertCircle className="w-6 h-6 text-red-400 shrink-0 animate-pulse" />
             <div className="text-left">
               <p className="font-extrabold text-sm sm:text-base text-white">
-                Désolé... Rien 😢 Retente !
+                {t("lossMessageTitle")}
               </p>
               <p className="text-xs text-red-300">
-                La 2ème boîte contient obligatoirement de l'argent et un cadeau de luxe (Véhicule, iPhone, Rolex...) !
+                {t("lossMessageSub")}
               </p>
             </div>
           </motion.div>
