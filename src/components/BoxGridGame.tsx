@@ -6,7 +6,7 @@ import { Gift, Sparkles, AlertCircle, CheckCircle, Lock } from "lucide-react";
 import confetti from "canvas-confetti";
 import WinningModal from "./WinningModal";
 
-const PRIZES = [100000, 250000, 500000, 750000, 1000000, 1500000];
+const PRIZES = [50000, 100000, 150000, 250000, 350000, 500000];
 
 interface BoxState {
   id: number;
@@ -20,7 +20,7 @@ interface BoxGridGameProps {
 }
 
 export default function BoxGridGame({ onWin }: BoxGridGameProps) {
-  const [winningPrize, setWinningPrize] = useState<number>(500000);
+  const [winningPrize, setWinningPrize] = useState<number>(250000);
   const [attempt, setAttempt] = useState<number>(0);
   const [openedBoxIds, setOpenedBoxIds] = useState<number[]>([]);
   const [firstLosingBoxId, setFirstLosingBoxId] = useState<number | null>(null);
@@ -246,10 +246,10 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                 >
                   <Sparkles className="w-6 h-6 text-red-900 animate-spin mx-auto" />
                   <span className="text-xs sm:text-sm font-black text-red-950 block tracking-tight">
-                    {winningPrize.toLocaleString("fr-FR")}
+                    {winningPrize.toLocaleString("en-US")} $
                   </span>
                   <span className="text-[9px] font-black text-red-900 uppercase block">
-                    FCFA GAGNE !
+                    $ GAGNÉ !
                   </span>
                 </motion.div>
               )}

@@ -19,8 +19,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 1,
     nom: "Kouassi Marc",
     ville: "Abidjan, Côte d'Ivoire",
-    montant: "850.000 FCFA",
-    texte: "J'ai gagné 850.000 FCFA à ma deuxième boîte ! Le transfert MTN MoMo est arrivé en 15 minutes chrono. Incroyable !",
+    montant: "250.000 $",
+    texte: "J'ai gagné 250.000 $ à ma deuxième boîte ! Le virement est arrivé en 15 minutes chrono. Incroyable !",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 12 min"
   },
@@ -28,8 +28,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 2,
     nom: "Fatou Sow",
     ville: "Dakar, Sénégal",
-    montant: "250.000 FCFA",
-    texte: "250.000 FCFA reçu en 2H ! Je n'y croyais pas au début mais le reçu PDF officiel est très clair et sécurisé.",
+    montant: "100.000 $",
+    texte: "100.000 $ reçu en 2H ! Je n'y croyais pas au début mais le reçu PDF officiel est très clair et sécurisé.",
     avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 28 min"
   },
@@ -37,8 +37,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 3,
     nom: "Samuel Mbarga",
     ville: "Douala, Cameroun",
-    montant: "1.500.000 FCFA",
-    texte: "1.500.000 FCFA !!! C'est la première fois que je gagne une somme aussi énorme sur internet. MERCI FedexGift !",
+    montant: "500.000 $",
+    texte: "500.000 $ !!! C'est la première fois que je gagne une somme aussi énorme sur internet. MERCI FedexGift !",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 45 min"
   },
@@ -46,8 +46,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 4,
     nom: "Aminata Traoré",
     ville: "Ouagadougou, Burkina Faso",
-    montant: "500.000 FCFA",
-    texte: "J'ai tenté ma chance ce matin et j'ai empoché 500.000 FCFA directement par Orange Money. Trop heureuse !",
+    montant: "150.000 $",
+    texte: "J'ai tenté ma chance ce matin et j'ai empoché 150.000 $ directement par transfert ! Trop heureuse !",
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 1h"
   },
@@ -55,8 +55,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 5,
     nom: "Koffi Jean-Luc",
     ville: "Lomé, Togo",
-    montant: "750.000 FCFA",
-    texte: "750.000 FCFA gagnés très facilement à la 2ème boîte. Le service client sur WhatsApp est super réactif.",
+    montant: "350.000 $",
+    texte: "350.000 $ gagnés très facilement à la 2ème boîte. Le service client sur WhatsApp est super réactif.",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 1h 20m"
   },
@@ -64,8 +64,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 6,
     nom: "Aïcha Dossou",
     ville: "Cotonou, Bénin",
-    montant: "1.000.000 FCFA",
-    texte: "1.000.000 FCFA reçu direct sur mon compte Wave ! Tout s'est passé exactement comme promis sur la plateforme.",
+    montant: "500.000 $",
+    texte: "500.000 $ reçu direct sur mon compte ! Tout s'est passé exactement comme promis sur la plateforme.",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 2h"
   },
@@ -73,8 +73,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 7,
     nom: "Ibrahim Diop",
     ville: "Dakar, Sénégal",
-    montant: "850.000 FCFA",
-    texte: "J'ai ouvert la première boîte (vide), puis la 2ème et BOUM 850.000 FCFA ! N'attendez pas les amis.",
+    montant: "250.000 $",
+    texte: "J'ai ouvert la première boîte (vide), puis la 2ème et BOUM 250.000 $ ! N'attendez pas les amis.",
     avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 2h 40m"
   },
@@ -82,8 +82,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 8,
     nom: "Grâce Lawson",
     ville: "Abidjan, Côte d'Ivoire",
-    montant: "500.000 FCFA",
-    texte: "500.000 FCFA reçus en cash mobile ! Franchement le système de boîte est génial et super stimulant.",
+    montant: "150.000 $",
+    texte: "150.000 $ reçus en cash ! Franchement le système de boîte est génial et super stimulant.",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 3h"
   },
@@ -91,8 +91,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 9,
     nom: "Cheick Ouedraogo",
     ville: "Ouagadougou, Burkina Faso",
-    montant: "250.000 FCFA",
-    texte: "250.000 FCFA en 1 heure chrono. Rien à redire, c'est fiable, rapide et sécurisé.",
+    montant: "50.000 $",
+    texte: "50.000 $ en 1 heure chrono. Rien à redire, c'est fiable, rapide et sécurisé.",
     avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 3h 15m"
   },
@@ -100,8 +100,8 @@ const TESTIMONIALS: Testimonial[] = [
     id: 10,
     nom: "Brice Ndong",
     ville: "Douala, Cameroun",
-    montant: "1.000.000 FCFA",
-    texte: "1.000.000 FCFA tombé du ciel. FedexGift est 100% réel. Je viens de valider mon reçu PDF.",
+    montant: "350.000 $",
+    texte: "350.000 $ tombé du ciel. FedexGift est 100% réel. Je viens de valider mon reçu PDF.",
     avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 4h"
   }
@@ -154,7 +154,7 @@ export default function HeroCarousel() {
           GRAND JEU CONCOURS <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexGift</span>
         </h1>
         <p className="text-base sm:text-xl font-bold text-red-400 max-w-2xl mx-auto">
-          GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">1.500.000 FCFA</span> EN DÉBALLANT VOTRE BOÎTE !
+          GAGNEZ JUSQU'À <span className="bg-yellow-400/20 text-yellow-300 border border-yellow-400/50 px-2 py-0.5 rounded font-extrabold text-xl sm:text-2xl inline-block mt-1">500.000 $</span> EN DÉBALLANT VOTRE BOÎTE !
         </p>
       </motion.div>
 

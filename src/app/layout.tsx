@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "FedexGift - Grand Jeu Concours Cadeaux",
-  description: "Tentez votre chance et gagnez jusqu'à 1.500.000 FCFA instantanément avec FedexGift ! 15 boîtes cadeaux disponibles.",
+  description: "Tentez votre chance et gagnez jusqu'à 500.000 $ instantanément avec FedexGift ! 15 boîtes cadeaux disponibles.",
 };
 
 export const viewport: Viewport = {

@@ -49,7 +49,7 @@ export default function WinningModal({ isOpen, winningPrize, onClaim }: WinningM
           {/* Winning Amount Card */}
           <div className="my-6 py-4 px-6 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-yellow-400/30 to-yellow-500/20 border-2 border-yellow-400/70 shadow-inner">
             <p className="text-3xl sm:text-4xl md:text-5xl font-black text-yellow-300 tracking-tight">
-              {winningPrize.toLocaleString("fr-FR")} <span className="text-xl sm:text-2xl">FCFA</span>
+              {winningPrize.toLocaleString("en-US")} <span className="text-xl sm:text-2xl">$</span>
             </p>
           </div>
 
@@ -57,12 +57,12 @@ export default function WinningModal({ isOpen, winningPrize, onClaim }: WinningM
           <div className="relative w-full max-w-xs mx-auto h-32 mb-6 rounded-xl bg-gradient-to-b from-green-950/80 to-brandDark-900 border border-green-500/40 p-3 flex flex-col justify-between items-center shadow-lg overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.15),transparent_70%)]" />
             <div className="w-full flex justify-between items-center text-xs font-mono text-green-400 font-bold">
-              <span>BCEAO / FCFA</span>
+              <span>TRANSFERT BANCAIRE / $ USD</span>
               <span>100% SÉCURISÉ</span>
             </div>
             <div className="text-center my-auto">
               <span className="text-3xl font-black text-green-300 font-mono tracking-wider drop-shadow-md">
-                💵 {winningPrize.toLocaleString("fr-FR")} 💵
+                💵 $ {winningPrize.toLocaleString("en-US")} 💵
               </span>
               <p className="text-[10px] text-green-400/80 uppercase font-semibold mt-1">
                 Liasse de Billets Prête Pour Transfert Mobile

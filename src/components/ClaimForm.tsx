@@ -162,7 +162,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
 
     doc.setFontSize(22);
     doc.setTextColor(22, 163, 74);
-    doc.text(`${winningPrize.toLocaleString("fr-FR")} FCFA`, 105, startY + 28, { align: "center" });
+    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD`, 105, startY + 28, { align: "center" });
 
     // Official Certification Stamp
     doc.setDrawColor(22, 163, 74);
@@ -189,7 +189,7 @@ export default function ClaimForm({ winningPrize }: ClaimFormProps) {
   const getWhatsAppLink = () => {
     const fullPhone = `${countryCode}${phone}`;
     const selectedPayName = PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Mobile Money";
-    const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("fr-FR")} FCFA sur le site !
+    const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("en-US")} $ sur le site !
 
 Nom: ${nom}
 Email: ${email}
@@ -214,7 +214,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert !`;
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white">
-            RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("fr-FR")} FCFA</span>
+            RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
           </h2>
           <p className="text-xs sm:text-sm text-gray-300">
             Remplissez vos informations exactes pour recevoir votre virement immédiat.
