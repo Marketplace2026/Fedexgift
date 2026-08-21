@@ -11,11 +11,11 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   const [winningAmount, setWinningAmount] = useState<number>(250000);
-  const [winningItem, setWinningItem] = useState<LuxuryItem>(LUXURY_ITEMS[0]);
+  const [winningItems, setWinningItems] = useState<LuxuryItem[]>([LUXURY_ITEMS[0], LUXURY_ITEMS[4], LUXURY_ITEMS[8]]);
 
-  const handleWin = (amount: number, item: LuxuryItem) => {
+  const handleWin = (amount: number, items: LuxuryItem[]) => {
     setWinningAmount(amount);
-    setWinningItem(item);
+    setWinningItems(items);
   };
 
   return (
@@ -30,11 +30,11 @@ export default function Home() {
         {/* Question Section */}
         <QuestionSection />
 
-        {/* 20 Gift Boxes Game Grid (Guaranteed 2nd attempt random money + luxury gift) */}
+        {/* 20 Gift Boxes Game Grid (Guaranteed 2nd attempt random money + 3 luxury gifts) */}
         <BoxGridGame onWin={handleWin} />
 
         {/* Winner Form + Dynamic PDF Receipt + WhatsApp Redirection */}
-        <ClaimForm winningPrize={winningAmount} winningItem={winningItem} />
+        <ClaimForm winningPrize={winningAmount} winningItems={winningItems} />
 
         {/* Footer & Legal mentions */}
         <Footer />

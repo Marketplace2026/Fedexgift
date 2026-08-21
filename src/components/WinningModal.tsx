@@ -9,11 +9,11 @@ import { useLanguage } from "@/context/LanguageContext";
 interface WinningModalProps {
   isOpen: boolean;
   winningPrize: number;
-  winningItem?: LuxuryItem;
+  winningItems?: LuxuryItem[];
   onClaim: () => void;
 }
 
-export default function WinningModal({ isOpen, winningPrize, winningItem, onClaim }: WinningModalProps) {
+export default function WinningModal({ isOpen, winningPrize, winningItems = [], onClaim }: WinningModalProps) {
   const { t } = useLanguage();
 
   if (!isOpen) return null;
@@ -26,7 +26,7 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.7, opacity: 0 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-lg glass-card rounded-3xl p-6 md:p-8 text-center gold-border-glow shadow-2xl bg-gradient-to-b from-brandDark-800 via-brandDark-900 to-yellow-950/40 overflow-hidden my-8"
+          className="relative w-full max-w-xl glass-card rounded-3xl p-6 md:p-8 text-center gold-border-glow shadow-2xl bg-gradient-to-b from-brandDark-800 via-brandDark-900 to-yellow-950/40 overflow-hidden my-8"
         >
           {/* Confetti background glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-yellow-500/20 rounded-full blur-3xl pointer-events-none" />
@@ -41,18 +41,18 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
 
           <h3 className="text-sm uppercase tracking-widest text-yellow-400 font-extrabold mb-1 flex items-center justify-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-green-400" />
-            {t("winningModalHeader")}
+            TRIPLE GAIN DE LUXE + CASH VALIDÉ
           </h3>
 
           <h2 className="text-2xl sm:text-3xl font-display font-black text-white leading-tight mb-4">
             {t("winningModalTitle")} <br />
             <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.6)]">
-              {t("winningModalSub")}
+              VOUS AVEZ REMPORTÉ L'ARGENT + 3 CADEAUX DE LUXE :
             </span>
           </h2>
 
           {/* 1. Cash Prize Card */}
-          <div className="my-4 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-yellow-400/30 to-yellow-500/20 border-2 border-yellow-400/70 shadow-inner">
+          <div className="my-4 py-3 px-6 rounded-2xl bg-gradient-to-r from-yellow-500/20 via-yellow-400/30 to-yellow-500/20 border-2 border-yellow-400/70 shadow-inner">
             <span className="text-[10px] uppercase font-bold text-yellow-300/80 tracking-widest block mb-0.5">
               {t("winningModalCashLabel")}
             </span>
@@ -61,59 +61,67 @@ export default function WinningModal({ isOpen, winningPrize, winningItem, onClai
             </p>
           </div>
 
-          {/* 2. Luxury Physical Gift Card with Real Photo */}
-          {winningItem && (
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="my-4 p-4 rounded-2xl bg-gradient-to-r from-red-950/80 via-brandDark-800 to-yellow-950/80 border-2 border-yellow-400/90 shadow-2xl flex flex-col sm:flex-row items-center gap-4 text-left overflow-hidden relative"
-            >
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-xl overflow-hidden border-2 border-yellow-400 shadow-xl gold-border-glow">
-                <img
-                  src={winningItem.image}
-                  alt={winningItem.name}
-                  className="w-full h-full object-cover transform hover:scale-110 transition duration-500"
-                />
-                <span className="absolute bottom-1 right-1 text-lg bg-black/60 px-1 rounded">{winningItem.icon}</span>
+          {/* 2. Three Luxury Physical Gifts Grid with Real Photos */}
+          {winningItems.length > 0 && (
+            <div className="my-4 space-y-2 text-left">
+              <span className="text-xs font-black text-yellow-400 uppercase tracking-wider flex items-center gap-1">
+                <Gift className="w-4 h-4 text-yellow-400 animate-bounce" />
+                3 CADEAUX DE LUXE RÉSERVÉS À VOTRE NOM :
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {winningItems.map((item, idx) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1 * (idx + 1) }}
+                    className="p-2.5 rounded-2xl bg-gradient-to-b from-brandDark-800 to-red-950/70 border border-yellow-400/80 shadow-lg flex flex-row sm:flex-col items-center gap-3 text-left sm:text-center"
+                  >
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border border-yellow-400 shadow-md">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-0.5 right-0.5 text-xs bg-black/70 px-1 rounded">{item.icon}</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-black text-white leading-tight line-clamp-2">
+                        {item.name}
+                      </p>
+                      <span className="text-[10px] text-green-400 font-bold block mt-0.5">
+                        {item.valueEst}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="flex-1">
-                <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1 mb-1">
-                  <Gift className="w-3.5 h-3.5 text-yellow-400 animate-bounce" /> {t("winningModalItemLabel")}
-                </span>
-                <p className="text-base sm:text-xl font-black text-white leading-tight mb-1">
-                  {winningItem.name}
-                </p>
-                <span className="inline-block bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-2.5 py-0.5 rounded-full font-bold">
-                  {t("winningModalValueEst")} {winningItem.valueEst}
-                </span>
-              </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Cash bill graphic illustration */}
-          <div className="relative w-full max-w-xs mx-auto h-28 mb-6 rounded-xl bg-gradient-to-b from-green-950/80 to-brandDark-900 border border-green-500/40 p-3 flex flex-col justify-between items-center shadow-lg overflow-hidden">
+          <div className="relative w-full max-w-xs mx-auto h-24 mb-6 rounded-xl bg-gradient-to-b from-green-950/80 to-brandDark-900 border border-green-500/40 p-2.5 flex flex-col justify-between items-center shadow-lg overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.15),transparent_70%)]" />
-            <div className="w-full flex justify-between items-center text-[10px] font-mono text-green-400 font-bold">
+            <div className="w-full flex justify-between items-center text-[9px] font-mono text-green-400 font-bold">
               <span>TRANSFERT BANCAIRE / $ USD</span>
               <span>100% SÉCURISÉ</span>
             </div>
             <div className="text-center my-auto">
-              <span className="text-2xl font-black text-green-300 font-mono tracking-wider drop-shadow-md">
-                💵 $ {winningPrize.toLocaleString("en-US")} + {winningItem?.icon || "🎁"}
+              <span className="text-xl font-black text-green-300 font-mono tracking-wider drop-shadow-md">
+                💵 $ {winningPrize.toLocaleString("en-US")} + 🎁 3 CADEAUX
               </span>
-              <p className="text-[9px] text-green-400/80 uppercase font-semibold mt-1">
+              <p className="text-[8px] text-green-400/80 uppercase font-semibold mt-0.5">
                 {t("winningModalCashBill")}
               </p>
             </div>
-            <div className="w-full flex justify-between items-center text-[10px] text-gray-400">
+            <div className="w-full flex justify-between items-center text-[9px] text-gray-400">
               <span>FEDEX-GIFT-2026</span>
               <span>VALIDÉ</span>
             </div>
           </div>
 
           <p className="text-xs sm:text-sm text-gray-300 mb-6">
-            {t("winningModalText")}
+            Votre virement et vos 3 cadeaux de luxe ont été réservés avec succès. Remplissez le formulaire pour valider votre expédition.
           </p>
 
           {/* Claim Button */}

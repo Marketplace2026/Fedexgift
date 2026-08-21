@@ -20,23 +20,33 @@ export interface LuxuryItem {
 }
 
 export const LUXURY_ITEMS: LuxuryItem[] = [
-  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000", image: "/images/items/tesla.jpg", shippingFee: 385 },
-  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599", image: "/images/items/iphone.jpg", shippingFee: 210 },
-  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500", image: "/images/items/rolex.jpg", shippingFee: 250 },
-  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000", image: "/images/items/mercedes.jpg", shippingFee: 350 },
-  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999", image: "/images/items/macbook.jpg", shippingFee: 225 },
-  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500", image: "/images/items/harley.jpg", shippingFee: 295 },
-  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200", image: "/images/items/ps5.jpg", shippingFee: 200 },
-  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000", image: "/images/items/porsche.jpg", shippingFee: 375 }
+  // 1. Véhicules
+  { id: "jeep", name: "Jeep Renegade SUV 4x4", category: "Véhicule SUV", icon: "🚙", valueEst: "$32,000", image: "/images/items/jeep.jpg", shippingFee: 385 },
+  { id: "fiat500", name: "Fiat 500 Électrique", category: "Citadine Italienne", icon: "🚗", valueEst: "$28,000", image: "/images/items/fiat500.jpg", shippingFee: 350 },
+  // 2. Tracteurs & Équipements Agricoles Italiens
+  { id: "same", name: "Tracteur SAME Frutteto 70", category: "Équipement Agricole", icon: "🚜", valueEst: "$45,000", image: "/images/items/same.jpg", shippingFee: 380 },
+  { id: "carraro", name: "Tracteur Antonio Carraro Tigre 3200", category: "Tracteur Compact", icon: "🚜", valueEst: "$26,000", image: "/images/items/carraro.jpg", shippingFee: 340 },
+  // 3. Appareils Électroniques / High-Tech
+  { id: "iphone", name: "iPhone 16 Pro Max 1TB (Apple)", category: "Smartphone Premium", icon: "📱", valueEst: "$1,599", image: "/images/items/iphone.jpg", shippingFee: 210 },
+  { id: "ipad", name: "iPad Pro M4 13\" (Apple)", category: "Tablette Pro", icon: "💻", valueEst: "$1,299", image: "/images/items/ipad.jpg", shippingFee: 200 },
+  { id: "samsung", name: "Samsung Galaxy S24 Ultra", category: "Smartphone Premium", icon: "📱", valueEst: "$1,419", image: "/images/items/samsung.jpg", shippingFee: 205 },
+  // 4. Équipements de Maison & Cuisine Smeg
+  { id: "smeg_frigo", name: "Réfrigérateur Smeg 50's Style", category: "Équipement de Maison", icon: "🧊", valueEst: "$2,800", image: "/images/items/smeg_frigo.jpg", shippingFee: 290 },
+  { id: "smeg_cafe", name: "Machine à Café Espresso La Pavoni / Smeg", category: "Cuisine de Luxe", icon: "☕", valueEst: "$1,650", image: "/images/items/smeg_cafe.jpg", shippingFee: 220 },
+  // 5. Vêtements & Accessoires en Cuir Italiens
+  { id: "sac_cuir", name: "Sac à Main en Cuir Italien", category: "Maroquinerie de Luxe", icon: "👜", valueEst: "$3,500", image: "/images/items/sac_cuir.jpg", shippingFee: 240 },
+  { id: "costume", name: "Costume Sur Mesure Italien", category: "Haute Couture", icon: "👔", valueEst: "$2,900", image: "/images/items/costume.jpg", shippingFee: 230 },
+  // 6. Matériel de Construction
+  { id: "excavatrice", name: "Tractopelle / Excavatrice de Chantier", category: "Engin de Construction", icon: "🏗️", valueEst: "$55,000", image: "/images/items/excavatrice.jpg", shippingFee: 385 }
 ];
 
 interface BoxGridGameProps {
-  onWin: (amount: number, item: LuxuryItem) => void;
+  onWin: (amount: number, items: LuxuryItem[]) => void;
 }
 
 export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   const [winningPrize, setWinningPrize] = useState<number>(250000);
-  const [winningItem, setWinningItem] = useState<LuxuryItem>(LUXURY_ITEMS[0]);
+  const [winningItems, setWinningItems] = useState<LuxuryItem[]>([LUXURY_ITEMS[0], LUXURY_ITEMS[4], LUXURY_ITEMS[8]]);
   const [attempt, setAttempt] = useState<number>(0);
   const [openedBoxIds, setOpenedBoxIds] = useState<number[]>([]);
   const [firstLosingBoxId, setFirstLosingBoxId] = useState<number | null>(null);
@@ -45,16 +55,16 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   const [showWinningModal, setShowWinningModal] = useState<boolean>(false);
   const { t } = useLanguage();
 
-  // Initialize random prize and luxury item on mount
+  // Initialize random prize and 3 luxury items on mount
   useEffect(() => {
     const randomPrize = PRIZES[Math.floor(Math.random() * PRIZES.length)];
-    const randomItem = LUXURY_ITEMS[Math.floor(Math.random() * LUXURY_ITEMS.length)];
+    const shuffled = [...LUXURY_ITEMS].sort(() => 0.5 - Math.random());
+    const random3Items = shuffled.slice(0, 3);
     setWinningPrize(randomPrize);
-    setWinningItem(randomItem);
+    setWinningItems(random3Items);
   }, []);
 
   const handleBoxClick = (boxId: number) => {
-    // If box already opened or game finished (attempt >= 2), return
     if (openedBoxIds.includes(boxId) || attempt >= 2) return;
 
     if (attempt === 0) {
@@ -64,17 +74,16 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       setOpenedBoxIds([boxId]);
       setShowLossMessage(true);
     } else if (attempt === 1) {
-      // Second Attempt -> WINNER GUARANTEED (Money + Luxury Item)
+      // Second Attempt -> GUARANTEED WIN (Money + 3 Luxury Items!)
       setAttempt(2);
       setSecondWinningBoxId(boxId);
       setOpenedBoxIds((prev) => [...prev, boxId]);
       setShowLossMessage(false);
 
-      // Trigger Confetti explosion
       triggerConfetti();
 
       // Notify parent & open modal
-      onWin(winningPrize, winningItem);
+      onWin(winningPrize, winningItems);
       setTimeout(() => {
         setShowWinningModal(true);
       }, 600);
@@ -82,11 +91,8 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
   };
 
   const triggerConfetti = () => {
-    const count = 200;
-    const defaults = {
-      origin: { y: 0.7 },
-      zIndex: 999,
-    };
+    const count = 250;
+    const defaults = { origin: { y: 0.7 }, zIndex: 999 };
 
     function fire(particleRatio: number, opts: confetti.Options) {
       confetti({
@@ -96,30 +102,11 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       });
     }
 
-    fire(0.25, {
-      spread: 26,
-      startVelocity: 55,
-      colors: ['#FFD700', '#FFA500', '#DC2626'],
-    });
-    fire(0.2, {
-      spread: 60,
-      colors: ['#FFD700', '#22C55E', '#FFFFFF'],
-    });
-    fire(0.35, {
-      spread: 100,
-      decay: 0.91,
-      scalar: 0.8,
-    });
-    fire(0.1, {
-      spread: 120,
-      startVelocity: 25,
-      decay: 0.92,
-      colors: ['#FFD700', '#EAB308'],
-    });
-    fire(0.1, {
-      spread: 120,
-      startVelocity: 45,
-    });
+    fire(0.25, { spread: 26, startVelocity: 55, colors: ['#FFD700', '#FFA500', '#DC2626'] });
+    fire(0.2, { spread: 60, colors: ['#FFD700', '#22C55E', '#FFFFFF'] });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#FFD700', '#EAB308'] });
+    fire(0.1, { spread: 120, startVelocity: 45 });
   };
 
   const handleClaimFromModal = () => {
@@ -136,7 +123,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <div className="text-center mb-8 space-y-3">
         <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/50 px-4 py-1.5 rounded-full text-xs font-bold text-red-300 uppercase tracking-wider">
           <Sparkles className="w-4 h-4 text-yellow-400" />
-          {t("gameBadge")}
+          20 BOÎTES CADEAUX MYSTÈRES (ARGENT + 3 LOTS DE LUXE)
         </div>
 
         <h2 className="text-2xl sm:text-4xl font-display font-black text-white">
@@ -159,14 +146,14 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
               className="bg-green-600/20 border border-green-500/60 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2 shadow-lg"
             >
               <Sparkles className="w-5 h-5 text-yellow-400 animate-spin" />
-              <span>{t("step2")}</span>
+              <span>Dernière étape : Touchez la 2ème boîte pour DÉBALLER VOTRE GAIN + 3 CADEAUX !</span>
             </motion.div>
           )}
 
           {attempt >= 2 && (
             <div className="bg-green-600/30 border border-green-500/80 rounded-xl p-3 text-green-300 text-sm font-bold flex items-center justify-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>{t("boxOpened")}</span>
+              <span>BOÎTE GAGNANTE DÉBALLÉE ! ARGENT + 3 CADEAUX DE LUXE RÉSERVÉS.</span>
             </div>
           )}
         </div>
@@ -187,7 +174,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                 {t("lossMessageTitle")}
               </p>
               <p className="text-xs text-red-300">
-                {t("lossMessageSub")}
+                La 2ème boîte contient obligatoirement de l'argent et 3 cadeaux de luxe d'exception !
               </p>
             </div>
           </motion.div>
@@ -209,7 +196,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
               whileHover={!isLocked && !isOpened ? { scale: 1.08, rotate: index % 2 === 0 ? 2 : -2 } : {}}
               whileTap={!isLocked && !isOpened ? { scale: 0.92 } : {}}
               onClick={() => handleBoxClick(boxId)}
-              className={`relative aspect-square rounded-2xl p-2 cursor-pointer transition-all duration-300 flex flex-col items-center justify-center text-center select-none overflow-hidden ${
+              className={`relative aspect-square rounded-2xl p-1 cursor-pointer transition-all duration-300 flex flex-col items-center justify-center text-center select-none overflow-hidden ${
                 isWinningBox
                   ? "bg-gradient-to-tr from-yellow-500 via-amber-400 to-yellow-200 border-4 border-yellow-300 shadow-2xl shadow-yellow-500/60 z-20"
                   : isLosingBox
@@ -255,7 +242,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                 </motion.div>
               )}
 
-              {/* Opened Winning Box Content */}
+              {/* Opened Winning Box Content showing Cash + 3 Items Preview */}
               {isOpened && isWinningBox && (
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
@@ -263,16 +250,21 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   className="z-10 flex flex-col items-center justify-center space-y-0.5 p-0.5"
                 >
-                  <img
-                    src={winningItem.image}
-                    alt={winningItem.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border border-yellow-400 shadow-md"
-                  />
-                  <span className="text-[10px] sm:text-xs font-black text-red-950 block tracking-tight leading-tight">
+                  <div className="flex -space-x-2 overflow-hidden py-0.5">
+                    {winningItems.map((item, idx) => (
+                      <img
+                        key={idx}
+                        src={item.image}
+                        alt={item.name}
+                        className="w-7 h-7 sm:w-8 sm:h-8 object-cover rounded-full border-2 border-yellow-400 shadow-md inline-block"
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[10px] sm:text-xs font-black text-red-950 block tracking-tight leading-none">
                     {winningPrize.toLocaleString("en-US")} $
                   </span>
-                  <span className="text-[8px] font-extrabold text-red-900 uppercase block truncate max-w-[75px]">
-                    + {winningItem.name}
+                  <span className="text-[8px] font-extrabold text-red-900 uppercase block tracking-tighter">
+                    + 3 LOTS DE LUXE
                   </span>
                 </motion.div>
               )}
@@ -285,7 +277,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <WinningModal
         isOpen={showWinningModal}
         winningPrize={winningPrize}
-        winningItem={winningItem}
+        winningItems={winningItems}
         onClaim={handleClaimFromModal}
       />
     </section>

