@@ -18,6 +18,8 @@ export const LANGUAGES: LanguageOption[] = [
 export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   fr: {
     headerBanner: "EN DIRECT : Plus que {count} boîtes gagnantes disponibles aujourd'hui !",
+    headerSub: "Grand Jeu Concours",
+    headerSecurity: "Licence Certifiée & Sécurisée",
     heroBadge: "Tirage Au Sort 100% Gagnant à la 2ème Boîte",
     heroTitle: "GRAND JEU CONCOURS",
     heroSubtitle: "GAGNEZ JUSQU'À 500.000 $ + VÉHICULES & IPHONE EN DÉBALLANT VOTRE BOÎTE !",
@@ -93,6 +95,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   },
   en: {
     headerBanner: "LIVE: Only {count} winning boxes remaining today!",
+    headerSub: "Grand Giveaway Contest",
+    headerSecurity: "Certified & Secure License",
     heroBadge: "100% Guaranteed Win on 2nd Box",
     heroTitle: "GRAND GIVEAWAY CONTEST",
     heroSubtitle: "WIN UP TO $500,000 + LUXURY VEHICLES & IPHONE BY UNBOXING YOUR GIFT!",
@@ -168,6 +172,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   },
   it: {
     headerBanner: "IN DIRETTA: Solo {count} scatole vincenti rimaste oggi!",
+    headerSub: "Grande Concorso a Premi",
+    headerSecurity: "Licenza Certificata e Sicura",
     heroBadge: "Sorteggio 100% Vincente alla 2ª Scatola",
     heroTitle: "GRANDE CONCORSO A PREMI",
     heroSubtitle: "VINCI FINO A 500.000 $ + VEICOLI DI LUSSO & IPHONE APRENDO LA TUA SCATOLA!",
@@ -243,6 +249,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   },
   es: {
     headerBanner: "EN DIRECTO: ¡Solo quedan {count} cajas ganadoras hoy!",
+    headerSub: "Gran Concurso de Regalos",
+    headerSecurity: "Licencia Certificada y Segura",
     heroBadge: "Sorteo 100% Ganador en la 2ª Caja",
     heroTitle: "GRAN CONCURSO DE REGALOS",
     heroSubtitle: "¡GANA HASTA 500.000 $ + VEHÍCULOS DE LUJO Y IPHONES AL ABRIR TU CAJA!",
@@ -318,6 +326,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   },
   "pt-PT": {
     headerBanner: "EM DIRETO: Apenas {count} caixas vencedoras disponíveis hoje!",
+    headerSub: "Grande Concurso de Prémios",
+    headerSecurity: "Licença Certificada e Segura",
     heroBadge: "Sorteio 100% Vencedor na 2ª Caixa",
     heroTitle: "GRANDE CONCURSO DE PRÉMIOS",
     heroSubtitle: "GANHE ATÉ 500.000 $ + VEÍCULOS DE LUXO & IPHONES AO ABRIR A SUA CAIXA!",
@@ -393,6 +403,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   },
   "pt-BR": {
     headerBanner: "AO VIVO: Apenas {count} caixas premiadas restantes hoje!",
+    headerSub: "Grande Concurso de Prêmios",
+    headerSecurity: "Licença Certificada e Segura",
     heroBadge: "Sorteio 100% Premiado na 2ª Caixa",
     heroTitle: "GRANDE CONCURSO DE PRÊMIOS",
     heroSubtitle: "GANHE ATÉ $ 500.000 + VEÍCULOS DE LUXO E IPHONES AO ABRIR SUA CAIXA!",

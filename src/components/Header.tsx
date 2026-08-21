@@ -52,7 +52,7 @@ export default function Header() {
               FedexGift
             </h1>
             <p className="text-[10px] text-yellow-300/80 tracking-widest font-semibold uppercase -mt-1">
-              Grand Jeu Concours
+              {t("headerSub")}
             </p>
           </div>
         </motion.div>
@@ -65,7 +65,7 @@ export default function Header() {
         >
           <div className="hidden md:flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 text-xs px-2.5 py-1.5 rounded-full shadow-sm">
             <ShieldCheck className="w-4 h-4 text-green-400 shrink-0" />
-            <span className="font-semibold">Licence Certifiée & Sécurisée</span>
+            <span className="font-semibold">{t("headerSecurity")}</span>
           </div>
 
           {/* Interactive Language Selector Dropdown */}
