@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="flex items-center justify-center gap-2">
           <Gift className="w-5 h-5 text-yellow-400" />
           <span className="font-display font-black text-lg text-gold-gradient tracking-wide">
-            FedexShift
+            FedexGift
           </span>
         </div>
 
@@ -31,12 +31,12 @@ export default function Footer() {
 
         {/* Mentions Légales */}
         <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed text-[11px]">
-          FedexShift est une marque déposée opérant conformément aux réglementations de jeux concours promotionnels. Les tirages au sort sont régis par des algorithmes aléatoires cryptographiquement certifiés. Aucun paiement n'est exigé pour participer au tirage au sort des boîtes cadeaux.
+          FedexGift est une marque déposée opérant conformément aux réglementations de jeux concours promotionnels. Les tirages au sort sont régis par des algorithmes aléatoires cryptographiquement certifiés. Aucun paiement n'est exigé pour participer au tirage au sort des boîtes cadeaux.
         </p>
 
         {/* Trust Icons */}
         <div className="pt-4 border-t border-gray-800/60 flex items-center justify-between text-[10px] text-gray-400 flex-col sm:flex-row gap-2">
-          <p>© 2026 FedexShift. Tous droits réservés.</p>
+          <p>© 2026 FedexGift. Tous droits réservés.</p>
           <div className="flex items-center gap-3">
             <span>Confidentialité</span>
             <span>•</span>
