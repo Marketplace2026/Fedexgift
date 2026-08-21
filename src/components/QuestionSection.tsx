@@ -39,7 +39,7 @@ export default function QuestionSection() {
         </h2>
 
         <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto mb-6">
-          Aujourd'hui, c'est ton tour ! Il te suffit de choisir <span className="text-yellow-400 font-bold underline decoration-red-500">2 boîtes cadeaux</span> parmi les 15 disponibles. La chance t'attend !
+          Aujourd'hui, c'est ton tour ! Il te suffit de choisir <span className="text-yellow-400 font-bold underline decoration-red-500">2 boîtes cadeaux</span> parmi les 20 disponibles. La chance t'attend !
         </p>
 
         {/* Red CTA Button */}

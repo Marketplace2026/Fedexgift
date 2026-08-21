@@ -117,7 +117,7 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
       <div className="text-center mb-8 space-y-3">
         <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/50 px-4 py-1.5 rounded-full text-xs font-bold text-red-300 uppercase tracking-wider">
           <Sparkles className="w-4 h-4 text-yellow-400" />
-          15 BOÎTES CADEAUX MYSTÈRES
+          20 BOÎTES CADEAUX MYSTÈRES
         </div>
 
         <h2 className="text-2xl sm:text-4xl font-display font-black text-white">
@@ -175,9 +175,9 @@ export default function BoxGridGame({ onWin }: BoxGridGameProps) {
         )}
       </AnimatePresence>
 
-      {/* 3x5 Grid = 15 Gift Boxes */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4 max-w-3xl mx-auto">
-        {Array.from({ length: 15 }, (_, index) => {
+      {/* 4x5 Grid = 20 Gift Boxes */}
+      <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 sm:gap-4 max-w-4xl mx-auto">
+        {Array.from({ length: 20 }, (_, index) => {
           const boxId = index + 1;
           const isOpened = openedBoxIds.includes(boxId);
           const isLosingBox = firstLosingBoxId === boxId;

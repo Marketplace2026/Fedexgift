@@ -5,12 +5,12 @@ import { ShieldCheck, Gift, Award, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Header() {
-  const [boxesLeft, setBoxesLeft] = useState(14);
+  const [boxesLeft, setBoxesLeft] = useState(19);
 
   useEffect(() => {
     // Random initial decrement between 0 and 3
     const initialDecrement = Math.floor(Math.random() * 4);
-    setBoxesLeft(14 - initialDecrement);
+    setBoxesLeft(19 - initialDecrement);
 
     // Decrement counter every 30 seconds down to minimum 2
     const interval = setInterval(() => {

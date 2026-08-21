@@ -26,7 +26,7 @@ export default function Home() {
       {/* Question Section */}
       <QuestionSection />
 
-      {/* 15 Gift Boxes Game Grid (Guaranteed 2nd attempt random prize) */}
+      {/* 20 Gift Boxes Game Grid (Guaranteed 2nd attempt random prize) */}
       <BoxGridGame onWin={handleWin} />
 
       {/* Winner Form + Dynamic PDF Receipt + WhatsApp Redirection */}
