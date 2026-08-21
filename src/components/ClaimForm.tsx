@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles } from "lucide-react";
+import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles, Truck, AlertTriangle } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { LuxuryItem } from "./BoxGridGame";
 import { useLanguage } from "@/context/LanguageContext";
@@ -19,17 +19,26 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [adresse, setAdresse] = useState("");
+  const [acceptShipping, setAcceptShipping] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [transactionId, setTransactionId] = useState("");
 
   const { t } = useLanguage();
 
+  // Dynamic shipping fee based on item won (between $200 and $385 USD)
+  const shippingFee = winningItem ? winningItem.shippingFee : 250;
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!nom.trim() || !email.trim() || !adresse.trim()) {
       alert("Veuillez remplir tous les champs obligatoires (*)");
+      return;
+    }
+
+    if (!acceptShipping) {
+      alert("Veuillez cocher la case d'acceptation des frais de livraison pour valider votre reçu.");
       return;
     }
 
@@ -124,6 +133,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       [t("pdfRowEmail"), email],
       [t("pdfRowAdresse"), adresse],
       [t("pdfRowItem"), itemName],
+      [t("pdfRowShipping"), `$ ${shippingFee} USD (ENGAGEMENT VALIDE)`],
       [t("pdfRowStatus"), t("pdfStatusValue")],
     ];
 
@@ -139,7 +149,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       doc.text(splitVal, 88, startY);
 
       doc.setFont("helvetica", "normal");
-      startY += (splitVal.length * 6) + 3;
+      startY += (splitVal.length * 6) + 2.5;
     });
 
     // Winning Prize Box
@@ -186,9 +196,10 @@ ${t("waName")} ${nom}
 ${t("waEmail")} ${email}
 ${t("waAddress")} ${adresse}
 ${t("waItem")} ${itemStr}
+${t("waShippingFee")} $ ${shippingFee} USD
 ${t("waRef")} ${transactionId}
 
-${t("waClosing")}`;
+${t("waClosing", { fee: shippingFee })}`;
 
     return `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
@@ -205,19 +216,26 @@ ${t("waClosing")}`;
           </div>
 
           {winningItem && (
-            <div className="mb-6 p-3 rounded-2xl bg-brandDark-800/90 border border-yellow-500/40 flex items-center gap-3 text-left">
-              <img
-                src={winningItem.image}
-                alt={winningItem.name}
-                className="w-14 h-14 object-cover rounded-xl border border-yellow-400 shrink-0 shadow-md"
-              />
-              <div>
-                <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
-                  🎁 {t("winningModalItemLabel")}
-                </span>
-                <span className="text-sm font-black text-white block">
-                  {winningItem.name} ({winningItem.valueEst})
-                </span>
+            <div className="mb-6 p-3 rounded-2xl bg-brandDark-800/90 border border-yellow-500/40 flex items-center justify-between gap-3 text-left">
+              <div className="flex items-center gap-3">
+                <img
+                  src={winningItem.image}
+                  alt={winningItem.name}
+                  className="w-14 h-14 object-cover rounded-xl border border-yellow-400 shrink-0 shadow-md"
+                />
+                <div>
+                  <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
+                    🎁 {t("winningModalItemLabel")}
+                  </span>
+                  <span className="text-sm font-black text-white block">
+                    {winningItem.name} ({winningItem.valueEst})
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-right shrink-0 bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-1 rounded-xl">
+                <span className="text-[9px] text-gray-400 uppercase font-bold block">Expédition</span>
+                <span className="text-xs font-black text-yellow-300">${shippingFee} USD</span>
               </div>
             </div>
           )}
@@ -282,6 +300,32 @@ ${t("waClosing")}`;
               <span className="text-[10px] text-gray-400 mt-1 block">
                 {t("addressHelper")}
               </span>
+            </div>
+
+            {/* MANDATORY SHIPPING FEE ACCEPTANCE CHECKBOX */}
+            <div className="bg-gradient-to-r from-yellow-500/10 via-amber-500/20 to-yellow-500/10 border-2 border-yellow-400/80 rounded-2xl p-4 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between text-xs font-bold text-yellow-300">
+                <span className="flex items-center gap-1.5">
+                  <Truck className="w-4 h-4 text-yellow-400 animate-bounce" />
+                  {t("shippingFeeNotice")}
+                </span>
+                <span className="bg-yellow-400 text-black px-2.5 py-0.5 rounded-full font-black text-sm shadow-md">
+                  ${shippingFee} USD
+                </span>
+              </div>
+
+              <label className="flex items-start gap-3 cursor-pointer select-none text-left">
+                <input
+                  type="checkbox"
+                  required
+                  checked={acceptShipping}
+                  onChange={(e) => setAcceptShipping(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-700 text-yellow-500 focus:ring-yellow-400 mt-0.5 cursor-pointer accent-yellow-400 shrink-0"
+                />
+                <span className="text-xs sm:text-sm font-bold text-white leading-snug">
+                  {t("acceptShippingLabel", { fee: shippingFee })}
+                </span>
+              </label>
             </div>
 
             {/* Submit Button */}

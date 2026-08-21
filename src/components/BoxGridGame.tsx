@@ -16,17 +16,18 @@ export interface LuxuryItem {
   icon: string;
   valueEst: string;
   image: string;
+  shippingFee: number;
 }
 
 export const LUXURY_ITEMS: LuxuryItem[] = [
-  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000", image: "/images/items/tesla.jpg" },
-  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599", image: "/images/items/iphone.jpg" },
-  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500", image: "/images/items/rolex.jpg" },
-  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000", image: "/images/items/mercedes.jpg" },
-  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999", image: "/images/items/macbook.jpg" },
-  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500", image: "/images/items/harley.jpg" },
-  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200", image: "/images/items/ps5.jpg" },
-  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000", image: "/images/items/porsche.jpg" }
+  { id: "tesla", name: "Tesla Model S Plaid 2026", category: "Véhicule de Luxe", icon: "🏎️", valueEst: "$110,000", image: "/images/items/tesla.jpg", shippingFee: 385 },
+  { id: "iphone", name: "iPhone 16 Pro Max 1TB", category: "High-Tech", icon: "📱", valueEst: "$1,599", image: "/images/items/iphone.jpg", shippingFee: 210 },
+  { id: "rolex", name: "Rolex Submariner Gold", category: "Horlogerie", icon: "⌚", valueEst: "$38,500", image: "/images/items/rolex.jpg", shippingFee: 250 },
+  { id: "mercedes", name: "Mercedes-AMG CLA Coupe", category: "Véhicule de Luxe", icon: "🚗", valueEst: "$65,000", image: "/images/items/mercedes.jpg", shippingFee: 350 },
+  { id: "macbook", name: "MacBook Pro 16\" M3 Max", category: "High-Tech", icon: "💻", valueEst: "$3,999", image: "/images/items/macbook.jpg", shippingFee: 225 },
+  { id: "harley", name: "Harley-Davidson Sportster", category: "Moto de Luxe", icon: "🏍️", valueEst: "$18,500", image: "/images/items/harley.jpg", shippingFee: 295 },
+  { id: "ps5", name: "PlayStation 5 Pro + VR2 Pack", category: "Gaming", icon: "🎮", valueEst: "$1,200", image: "/images/items/ps5.jpg", shippingFee: 200 },
+  { id: "porsche", name: "Porsche Macan GTS 2026", category: "Véhicule de Luxe", icon: "🚘", valueEst: "$95,000", image: "/images/items/porsche.jpg", shippingFee: 375 }
 ];
 
 interface BoxGridGameProps {
