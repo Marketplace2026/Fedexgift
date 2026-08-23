@@ -12,8 +12,8 @@ interface ClaimFormProps {
   winningItems?: LuxuryItem[];
 }
 
-// Admin WhatsApp Number
-const ADMIN_WHATSAPP_NUMBER = "22990000000";
+// Admin WhatsApp Number (+224663267096)
+const ADMIN_WHATSAPP_NUMBER = "224663267096";
 
 export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimFormProps) {
   const [nom, setNom] = useState("");
