@@ -31,7 +31,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Giulia Bianchi",
     ville: "Roma, Italia 🇮🇹",
     montant: "100.000 $",
-    texte: "100.000 $ ricevuti in 2 ore! La ricevuta PDF ufficiale è chiarissima e sicura. Grazie FedexGift!",
+    texte: "100.000 $ ricevuti in 2 ore! La ricevuta PDF ufficiale è chiarissima e sicura. Grazie FedEx express gift 🎁!",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 15 min"
   },
@@ -40,7 +40,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Alessandro Moretti",
     ville: "Firenze, Italia 🇮🇹",
     montant: "500.000 $",
-    texte: "500.000 $ !!! È la prima volta che vinco una cifra così enorme su internet. GRAZIE FedexGift!",
+    texte: "500.000 $ !!! È la prima volta che vinco una cifra così enorme su internet. GRAZIE FedEx express gift 🎁!",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 22 min"
   },
@@ -78,7 +78,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Emily Davis",
     ville: "Los Angeles, USA 🇺🇸",
     montant: "250.000 $",
-    texte: "Opened the 1st box (empty), then the 2nd one and BOOM $250,000! Don't wait guys, FedexGift is legit.",
+    texte: "Opened the 1st box (empty), then the 2nd one and BOOM $250,000! Don't wait guys, FedEx express gift 🎁 is legit.",
     avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 1h"
   },
@@ -125,7 +125,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Lucía Gómez",
     ville: "Barcelona, España 🇪🇸",
     montant: "100.000 $",
-    texte: "100.000 $ recibidos en menos de 2 horas. ¡No me lo creía al principio pero FedexGift es 100% real!",
+    texte: "100.000 $ recibidos en menos de 2 horas. ¡No me lo creía al principio pero FedEx express gift 🎁 es 100% real!",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 2h 10m"
   },
@@ -134,7 +134,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Javier López",
     ville: "Valencia, España 🇪🇸",
     montant: "500.000 $",
-    texte: "¡¡500.000 $!! Es el premio más grande que he ganado jamás. ¡Muchísimas gracias FedexGift!",
+    texte: "¡¡500.000 $!! Es el premio más grande que he ganado jamás. ¡Muchísimas gracias FedEx express gift 🎁!",
     avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 2h 25m"
   },
@@ -181,7 +181,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Eero Heikkinen",
     ville: "Turku, Suomi 🇫🇮",
     montant: "500.000 $",
-    texte: "500 000 $ !!! Ensimmäinen kerta kun voitan näin suuren summan verkossa. KIITOS FedexGift!",
+    texte: "500 000 $ !!! Ensimmäinen kerta kun voitan näin suuren summan verkossa. KIITOS FedEx express gift 🎁!",
     avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 3h 45m"
   },
@@ -219,7 +219,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Beatriz Santos",
     ville: "Porto, Portugal 🇵🇹",
     montant: "250.000 $",
-    texte: "250.000 $ recebidos em menos de 2 horas. Não acreditava no início, mas o FedexGift é 100% real!",
+    texte: "250.000 $ recebidos em menos de 2 horas. Não acreditava no início, mas o FedEx express gift 🎁 é 100% real!",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 4h 45m"
   },
@@ -228,7 +228,7 @@ const TESTIMONIALS: Testimonial[] = [
     nom: "Gabriel Oliveira",
     ville: "São Paulo, Brasil 🇧🇷",
     montant: "500.000 $",
-    texte: "500.000 $ !!! Foi a primeira vez que ganhei um prêmio tão grande na internet. OBRIGADO FedexGift!",
+    texte: "500.000 $ !!! Foi a primeira vez que ganhei um prêmio tão grande na internet. OBRIGADO FedEx express gift 🎁!",
     avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
     temps: "Il y a 5h"
   },
@@ -252,7 +252,11 @@ const TESTIMONIALS: Testimonial[] = [
   }
 ];
 
-export default function HeroCarousel() {
+interface HeroCarouselProps {
+  onStartGame?: () => void;
+}
+
+export default function HeroCarousel({ onStartGame }: HeroCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { t } = useLanguage();
 
@@ -264,17 +268,33 @@ export default function HeroCarousel() {
   }, []);
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
   };
 
+  const current = TESTIMONIALS[currentIndex];
+
+  const scrollToGame = () => {
+    if (onStartGame) {
+      onStartGame();
+    }
+    setTimeout(() => {
+      const el = document.getElementById("game-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
   const scrollToQuestion = () => {
     const el = document.getElementById("question-section");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      scrollToGame();
     }
   };
 
@@ -297,7 +317,7 @@ export default function HeroCarousel() {
         </div>
 
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-black text-white leading-tight tracking-wide max-w-4xl mx-auto">
-          {t("heroTitle")} <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedexGift</span>
+          {t("heroTitle")} <span className="text-gold-gradient drop-shadow-[0_2px_15px_rgba(255,215,0,0.5)]">FedEx express gift 🎁</span>
         </h1>
         <p className="text-base sm:text-xl font-bold text-red-400 max-w-2xl mx-auto">
           {t("heroSubtitle")}

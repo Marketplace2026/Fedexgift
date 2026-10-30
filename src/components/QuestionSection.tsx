@@ -5,14 +5,23 @@ import { Gift, ArrowDown, HelpCircle, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function QuestionSection() {
+interface QuestionSectionProps {
+  onStartGame?: () => void;
+}
+
+export default function QuestionSection({ onStartGame }: QuestionSectionProps) {
   const { t } = useLanguage();
 
   const scrollToGame = () => {
-    const el = document.getElementById("game-section");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (onStartGame) {
+      onStartGame();
     }
+    setTimeout(() => {
+      const el = document.getElementById("game-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   };
 
   return (

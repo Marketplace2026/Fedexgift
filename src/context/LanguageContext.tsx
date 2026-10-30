@@ -17,7 +17,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Read saved language from localStorage if available
-    const savedLang = localStorage.getItem("fedex_gift_lang") as Language;
+    const savedLang = localStorage.getItem("fedex_express_gift_lang") as Language;
     if (savedLang && TRANSLATIONS[savedLang]) {
       setLanguageState(savedLang);
     }
@@ -25,7 +25,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem("fedex_gift_lang", lang);
+    localStorage.setItem("fedex_express_gift_lang", lang);
   };
 
   const t = (key: string, params?: Record<string, string | number>): string => {

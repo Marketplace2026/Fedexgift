@@ -49,7 +49,7 @@ export default function Header() {
           </div>
           <div>
             <h1 className="font-display font-black text-xl md:text-2xl tracking-wider text-gold-gradient drop-shadow-[0_2px_10px_rgba(255,215,0,0.4)]">
-              FedexGift
+              FedEx express gift 🎁
             </h1>
             <p className="text-[10px] text-yellow-300/80 tracking-widest font-semibold uppercase -mt-1">
               {t("headerSub")}
