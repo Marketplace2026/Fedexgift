@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { ShieldCheck, Truck, Users, Star, Award } from "lucide-react";
-import { useLanguage } from "@/context/LanguageContext";
 
 export default function TrustBar() {
-  const { t } = useLanguage();
   const [winnerCount, setWinnerCount] = useState(14820);
 
   useEffect(() => {
@@ -21,20 +19,20 @@ export default function TrustBar() {
         {/* Item 1: SSL Secure */}
         <div className="flex items-center gap-1 text-gray-300 whitespace-nowrap">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-          <span className="font-semibold">{t("trustSSL", { defaultValue: "SSL 256-bit" })}</span>
+          <span className="font-semibold">SSL 256-bit Sécurisé</span>
         </div>
 
         {/* Item 2: Official Delivery Partner */}
         <div className="flex items-center gap-1 text-gray-300 whitespace-nowrap">
           <Truck className="w-3.5 h-3.5 text-yellow-400 shrink-0" />
-          <span className="font-semibold">{t("trustDelivery", { defaultValue: "Livraison Suivie" })}</span>
+          <span className="font-semibold">Livraison Suivie</span>
         </div>
 
         {/* Item 3: Verified Winners Counter */}
         <div className="flex items-center gap-1 text-gray-300 whitespace-nowrap">
           <Users className="w-3.5 h-3.5 text-sky-400 shrink-0" />
           <span className="font-semibold">
-            <span className="text-emerald-400 font-bold">{winnerCount.toLocaleString()}</span> {t("trustWinners", { defaultValue: "Gagnants" })}
+            <span className="text-emerald-400 font-bold">{winnerCount.toLocaleString()}</span> Gagnants Validés
           </span>
         </div>
 
@@ -53,7 +51,7 @@ export default function TrustBar() {
         {/* Item 5: Guarantee & License */}
         <div className="hidden lg:flex items-center gap-1 text-gray-300 whitespace-nowrap">
           <Award className="w-3.5 h-3.5 text-yellow-400 shrink-0" />
-          <span className="font-semibold text-yellow-300/90">{t("trustLicense", { defaultValue: "Certifié FedEx Express 2026" })}</span>
+          <span className="font-semibold text-yellow-300/90">Certifié FedEx Express 2026</span>
         </div>
       </div>
     </div>
