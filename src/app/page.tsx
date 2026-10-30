@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <LanguageProvider>
-      <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#0b0f19] via-[#111827] to-[#080b12] text-white relative">
+      <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col bg-gradient-to-b from-[#0b0f19] via-[#111827] to-[#080b12] text-white relative">
         {/* Sticky Header with Dynamic Urgency Counter & Language Selector */}
         <Header />
 
@@ -65,7 +65,7 @@ export default function Home() {
 
         {/* Footer & Legal mentions */}
         <Footer />
-      </main>
+      </div>
     </LanguageProvider>
   );
 }

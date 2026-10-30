@@ -51,7 +51,7 @@ export default function LiveActivityToast() {
   }, []);
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 pointer-events-none max-w-sm">
+    <div className="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-50 pointer-events-none max-w-[calc(100vw-24px)] sm:max-w-sm">
       <AnimatePresence>
         {currentWinner && (
           <motion.div
@@ -59,9 +59,9 @@ export default function LiveActivityToast() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="pointer-events-auto bg-[#0d1424]/95 border border-yellow-500/40 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md flex items-center gap-3.5"
+            className="pointer-events-auto bg-[#0d1424]/95 border border-yellow-500/40 rounded-2xl p-2.5 sm:p-3.5 shadow-2xl backdrop-blur-md flex items-center gap-2.5 sm:gap-3.5 w-full"
           >
-            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center text-xl shadow-md shrink-0 border border-yellow-200">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center text-lg sm:text-xl shadow-md shrink-0 border border-yellow-200">
               {currentWinner.avatar}
             </div>
 
@@ -75,10 +75,10 @@ export default function LiveActivityToast() {
               </div>
               <p className="text-[11px] text-gray-300 truncate">{currentWinner.location}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[11px] font-black text-emerald-400">Gagné {currentWinner.amount}</span>
+                <span className="text-[11px] font-black text-emerald-400 shrink-0">Gagné {currentWinner.amount}</span>
                 <span className="text-[10px] text-yellow-300/80 truncate flex items-center gap-0.5">
-                  <Gift className="w-2.5 h-2.5 text-yellow-400" />
-                  {currentWinner.item}
+                  <Gift className="w-2.5 h-2.5 text-yellow-400 shrink-0" />
+                  <span className="truncate">{currentWinner.item}</span>
                 </span>
               </div>
             </div>
